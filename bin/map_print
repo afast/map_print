@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "map_print"
+
+MapPrint.print ARGV[0]

@@ -1,0 +1,28 @@
+PATH
+  remote: .
+  specs:
+    map_print (0.1.0)
+      prawn (~> 2.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.8.2)
+    pdf-core (0.6.0)
+    prawn (2.0.2)
+      pdf-core (~> 0.6.0)
+      ttfunk (~> 1.4.0)
+    rake (10.4.2)
+    ttfunk (1.4.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.10)
+  map_print!
+  minitest
+  rake (~> 10.0)
+
+BUNDLED WITH
+   1.10.6
