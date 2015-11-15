@@ -2,11 +2,13 @@ PATH
   remote: .
   specs:
     map_print (0.1.0)
+      mini_magick (~> 4.3)
       prawn (~> 2.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    mini_magick (4.3.6)
     minitest (5.8.2)
     pdf-core (0.6.0)
     prawn (2.0.2)

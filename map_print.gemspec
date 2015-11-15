@@ -31,4 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest"
   spec.add_dependency "prawn", "~> 2.0"
+  spec.add_dependency "mini_magick", "~> 4.3"
 end

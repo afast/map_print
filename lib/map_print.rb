@@ -1,11 +1,13 @@
 require 'map_print/version'
 require 'prawn'
+require 'mini_magick'
 
 module MapPrint
   # Your code goes here...
 end
 
 require 'map_print/core'
+
 
 module MapPrint
   def self.print(path)
