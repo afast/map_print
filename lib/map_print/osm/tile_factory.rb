@@ -8,13 +8,24 @@ module MapPrint
         @zoom = zoom
       end
 
+      def px_offset
+        return @px_offset if @px_offset
+        offset = {}
+
+        offset[:top] = (ne_offset[:y] * 256).to_i
+        offset[:right] = 256 - (ne_offset[:x] * 256).to_i
+        offset[:bottom] = 256 - (sw_offset[:y] * 256).to_i
+        offset[:left] = (sw_offset[:x] * 256).to_i
+        @px_offset = offset
+      end
+
       def tiles
         return @tiles if @tiles
 
         @tiles = []
         y_array.each do |y|
           x_array.each do |x|
-            @tiles << Tile.new(@base_url, x, y, @zoom)
+            @tiles << Tile.new(x, y, @zoom, @base_url)
           end
         end
 
@@ -27,6 +38,14 @@ module MapPrint
 
       def y_size
         y_array.size
+      end
+
+      def ne_offset
+        @ne_lat_lng.get_slippy_map_tile_number(@zoom)[:offset]
+      end
+
+      def sw_offset
+        @sw_lat_lng.get_slippy_map_tile_number(@zoom)[:offset]
       end
 
       def x_array

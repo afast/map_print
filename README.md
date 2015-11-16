@@ -1,8 +1,6 @@
 # MapPrint
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/map_print`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+MapPrint allows for exporting many map sources and GeoJSON to a pdf file. Allowing to specify map element, text/image elements as well as printing a legend with the reference and a scale bar.
 
 ## Installation
 
@@ -22,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+map_print file.pdf
 
 ## Development
 
@@ -32,10 +30,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/map_print.
+Bug reports and pull requests are welcome on GitHub at https://github.com/afast/map_print.
 
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-

@@ -1,6 +1,7 @@
 require 'map_print/version'
 require 'prawn'
 require 'mini_magick'
+require 'geo-distance'
 
 module MapPrint
   # Your code goes here...
