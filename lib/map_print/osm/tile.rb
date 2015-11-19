@@ -1,9 +1,9 @@
 require 'open-uri'
+require 'fileutils'
 
 module MapPrint
   module OSM
     class Tile
-      attr_reader :path
 
       METERS_PER_PIXELS = {
         0 => 26862156543.031,
@@ -28,17 +28,18 @@ module MapPrint
       }
 
       class << self
+
         def meters_per_pixel(zoom)
           METERS_PER_PIXELS[zoom]
         end
+
       end
 
-      def initialize(x, y, z, base_url=nil)
+      def initialize(x, y, z, base_url)
         @base_url = base_url
         @x = x
         @y = y
         @z = z
-        @path = "#{@x}-#{@y}-#{@z}.png"
       end
 
       def coords
@@ -46,17 +47,10 @@ module MapPrint
       end
 
       def download
-        puts "getting url #{get_url}"
-
-        delete
-        @image = open(get_url).read
-        File.open @path, 'wb' do |f|
-          f.write @image
+        unless File.exists?(file_path)
+          content = open(get_url).read
+          write_file(content)
         end
-      end
-
-      def delete
-        File.delete @path if File.exist?(@path)
       end
 
       def get_pixel_difference(lat_lng)
@@ -82,7 +76,30 @@ module MapPrint
         { lat: lat_deg, lng: lon_deg }
       end
 
+      def file_path
+        File.join(folder_name, "#{@y}.png")
+      end
+
       private
+
+      def write_file(content)
+        FileUtils.mkdir_p(folder_name)
+
+        File.open file_path, 'wb' do |f|
+          f.write content
+        end
+      end
+
+      def provider_name
+        if @base_url =~ /openstreetmap/
+          'osm'
+        end
+      end
+
+      def folder_name
+        "cache/#{provider_name}/#{@z}/#{@x}"
+      end
+
       def get_url
         @base_url.gsub('${x}', @x.to_s).gsub('${y}', @y.to_s).gsub('${z}', @z.to_s)
       end

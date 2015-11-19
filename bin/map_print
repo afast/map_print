@@ -1,6 +1,34 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "map_print"
+require 'thor'
+require 'bundler/setup'
+require 'map_print'
 
-MapPrint.print ARGV[0]
+class MapPrintCommand < Thor
+
+  desc "print", "Print a map using the given parameters"
+
+  method_option :south_west, type: :string, required: true
+  method_option :north_east, type: :string, required: true
+  method_option :output, type: :string, required: true
+  method_option :zoom, type: :numeric, default: 10
+
+  def print
+    south_west_coordinate = options[:south_west].split(',')
+      .map {|coordinate| Float(coordinate)}
+    north_east_coordinate = options[:north_east].split(',')
+        .map {|coordinate| Float(coordinate)}
+
+    south_west = MapPrint::LatLng.new(*south_west_coordinate)
+    north_east = MapPrint::LatLng.new(*north_east_coordinate)
+
+    result = MapPrint::Core.print(south_west, north_east, options[:zoom])
+
+    File.open options[:output], 'wb' do |f|
+      f.write result.read
+    end
+  end
+
+end
+
+MapPrintCommand.start

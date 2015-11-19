@@ -1,6 +1,7 @@
 module MapPrint
   module OSM
     class TileFactory
+
       def initialize(base_url, sw_lat_lng, ne_lat_lng, zoom)
         @base_url = base_url
         @sw_lat_lng = sw_lat_lng
@@ -17,6 +18,12 @@ module MapPrint
         offset[:bottom] = 256 - (sw_offset[:y] * 256).to_i
         offset[:left] = (sw_offset[:x] * 256).to_i
         @px_offset = offset
+      end
+
+      def download
+        Parallel.each(tiles, in_processes: 20) do |tile|
+          tile.download
+        end
       end
 
       def tiles

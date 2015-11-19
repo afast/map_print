@@ -1,17 +1,8 @@
-require 'map_print/version'
 require 'prawn'
 require 'mini_magick'
 require 'geo-distance'
+require 'parallel'
 
-module MapPrint
-  # Your code goes here...
-end
-
-require 'map_print/core'
-
-
-module MapPrint
-  def self.print(path)
-    MapPrint::Core.print(path)
-  end
-end
+require_relative 'base'
+require_relative 'map_print/version'
+require_relative 'map_print/core'
