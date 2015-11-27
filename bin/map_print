@@ -13,6 +13,9 @@ class MapPrintCommand < Thor
   method_option :output, type: :string, required: true
   method_option :zoom, type: :numeric, default: 10
 
+  method_option :provider, type: :string, default: 'osm',
+                enum: ['osm', 'bing']
+
   def print
     south_west_coordinate = options[:south_west].split(',')
       .map {|coordinate| Float(coordinate)}
@@ -22,7 +25,8 @@ class MapPrintCommand < Thor
     south_west = MapPrint::LatLng.new(*south_west_coordinate)
     north_east = MapPrint::LatLng.new(*north_east_coordinate)
 
-    result = MapPrint::Core.print(south_west, north_east, options[:zoom])
+    result = MapPrint::Core.print(options[:provider],
+                                  south_west, north_east, options[:zoom])
 
     File.open options[:output], 'wb' do |f|
       f.write result.read
