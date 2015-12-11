@@ -5,6 +5,8 @@ module MapPrint
   module OSM
     class Tile
 
+      BIT_TO_QUADKEY = { [false, false] => "0", [false, true] => "1", [true, false] => "2", [true, true] => "3"}
+
       METERS_PER_PIXELS = {
         0 => 26862156543.031,
         1 => 8078271.521,
@@ -55,11 +57,6 @@ module MapPrint
 
       def get_pixel_difference(lat_lng)
         tile_lat_lng = tile_number_to_lat_lng
-        puts '================'
-        puts lat_lng.lat
-        puts lat_lng.lng
-        puts tile_lat_lng
-        puts '================'
 
         x_pixels = GeoDistance.distance(lat_lng.lat, lat_lng.lng, lat_lng.lat, tile_lat_lng[:lng]).meters.number / METERS_PER_PIXELS[@z]
         y_pixels = GeoDistance.distance(lat_lng.lat, lat_lng.lng, tile_lat_lng[:lat], lat_lng.lng).meters.number / METERS_PER_PIXELS[@z]
@@ -80,6 +77,20 @@ module MapPrint
         File.join(folder_name, "#{@y}.png")
       end
 
+      def tile2quad
+        quadkey_chars = []
+
+        tx = @x.to_i
+        ty = @y.to_i
+
+        @z.times do
+          quadkey_chars.push BIT_TO_QUADKEY[[ty.odd?, tx.odd?]] # bit order y,x
+          tx >>= 1 ; ty >>= 1
+        end
+
+        quadkey_chars.join.reverse
+      end
+
       private
 
       def write_file(content)
@@ -93,6 +104,8 @@ module MapPrint
       def provider_name
         if @base_url =~ /openstreetmap/
           'osm'
+        elsif @base_url =~ /virtualearth/
+          'bing'
         end
       end
 
@@ -101,7 +114,11 @@ module MapPrint
       end
 
       def get_url
-        @base_url.gsub('${x}', @x.to_s).gsub('${y}', @y.to_s).gsub('${z}', @z.to_s)
+        if provider_name == 'osm'
+          @base_url.gsub('${x}', @x.to_s).gsub('${y}', @y.to_s).gsub('${z}', @z.to_s)
+        elsif provider_name == 'bing'
+          @base_url.gsub('${quadkey}', tile2quad)
+        end
       end
     end
   end
