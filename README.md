@@ -26,6 +26,7 @@ map_print file.pdf
 
 To tell map_print whatever it is you want to print use the following hash structure:
 
+```ruby
 {
   format: 'pdf', # or png
   map: {
@@ -85,6 +86,7 @@ To tell map_print whatever it is you want to print use the following hash struct
     size: {width: 50, height: 50}
   }
 }
+```
 
 ## Development
 
