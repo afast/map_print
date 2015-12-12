@@ -1,0 +1,84 @@
+require 'test_helper'
+
+class CoreTest < Minitest::Test
+  BASIC_MAP = {
+    format: 'pdf',
+    pdf_options: {
+      page_size: 'A4', # A0-10, B0-10, C0-10
+      page_layout: :portrait # :landscape
+    },
+    map: {
+      sw: {
+        lat: -35.026862,
+        lng: -58.425003
+      },
+      ne: {
+        lat: -29.980172,
+        lng: -52.959305
+      },
+      zoom: 10,
+      position: { # on the PDF
+        x: 50,
+        y: 50
+      },
+      size: {
+        width: 500,
+        height: 800
+      },
+      layers: [{
+        type: 'osm', # to understand variable substitution and stitching toghether the final image
+        urls: ['http://a.tile.openstreetmap.org/${z}/${x}/${y}.png'],
+        level: 3,
+        opacity: 1.0 # in case you want the layer to have some transparency
+      },
+      {
+        type: 'osm',
+        urls: ['http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png'],
+        level: 2,
+        opacity: 1.0
+      }]
+    },
+    images: [
+      {
+        path: './file.png',
+        position: {x: 50, y: 50 },
+        size: {width: 50, height: 50},
+        options: {}
+      }
+    ],
+    texts: [
+      {
+        text: "some text",
+        position: {x: 50, y: 50 },
+        size: {width: 50, height: 50},
+        options: {}
+      }
+    ],
+    legend: {
+      position: {x: 50, y: 50},
+      size: {width: 50, height: 50},
+      columns: 5,
+      rows: 5,
+      elements: [{
+        image: './file.png',
+        text: 'text'
+      }]
+    },
+    scalebar: {
+      unit: 'meters', # meters, km, miles, feet
+      position: {x: 50, y: 50},
+      size: {width: 50, height: 50}
+    }
+  }
+
+  def test_print_returns_file_path
+    map_print = MapPrint::Core.new('./map.pdf', BASIC_MAP)
+    assert_equal './map.pdf', map_print.print
+  end
+
+  def test_assert_printed_file_exists
+    File.delete './map.pdf' if File.exist?('./map.pdf')
+    MapPrint::Core.new('./map.pdf', BASIC_MAP).print
+    assert File.exist?('./map.pdf')
+  end
+end

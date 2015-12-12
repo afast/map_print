@@ -13,6 +13,12 @@ module MapPrint
       'bing'
     end
 
+    def cache_name
+      'bing-' + @base_url.scan(/\/\/(.*?)\/\$/).first.first.gsub('/', '-')
+    rescue
+      'bing'
+    end
+
     def tile2quad
       quadkey_chars = []
 

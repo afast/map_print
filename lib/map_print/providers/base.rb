@@ -9,12 +9,12 @@ module MapPrint
 
       attr_accessor :south_west, :north_east, :zoom
 
-      def initialize(south_west, north_east, zoom)
+      def initialize(south_west, north_east, zoom, base_url=nil)
         @south_west, @north_east, @zoom = south_west, north_east, zoom
-        @provider = build_provider
+        @provider = build_provider(base_url)
       end
 
-      def build_provider
+      def build_provider(base_url = nil)
         raise 'SubClasses must override this method'
       end
 
@@ -27,7 +27,7 @@ module MapPrint
       protected
 
       def to_image
-        file = Tempfile.new('map')
+        file = Tempfile.new(['map', '.png'])
 
         MiniMagick::Tool::Montage.new do |montage|
           montage.mode('concatenate')
@@ -36,7 +36,7 @@ module MapPrint
           montage << file.path
         end
 
-        result_file = Tempfile.new('result')
+        result_file = Tempfile.new(['result', '.png'])
 
         image = MiniMagick::Image.new(file.path)
         width = image.width - provider.px_offset[:left] - provider.px_offset[:right]

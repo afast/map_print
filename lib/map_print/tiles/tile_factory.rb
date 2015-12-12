@@ -5,8 +5,9 @@ module MapPrint
 
   class TileFactory
 
-    def initialize(base_url, sw_lat_lng, ne_lat_lng, zoom)
+    def initialize(base_url, type, sw_lat_lng, ne_lat_lng, zoom)
       @base_url = base_url
+      @type = type
       @sw_lat_lng = sw_lat_lng
       @ne_lat_lng = ne_lat_lng
       @zoom = zoom
@@ -77,9 +78,9 @@ module MapPrint
     private
 
     def tile_class
-      if @base_url =~ /openstreetmap/
+      if @type == 'osm'
         OSMTile
-      elsif @base_url =~ /virtualearth/
+      elsif @type =~ 'bing'
         BingTile
       end
     end

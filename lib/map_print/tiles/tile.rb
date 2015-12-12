@@ -83,6 +83,10 @@ module MapPrint
       raise 'SubClasses should overwrite this method'
     end
 
+    def cache_name
+      raise 'SubClasses should overwrite this method'
+    end
+
     def tile_url
       raise 'SubClasses should overwrite this method'
     end
@@ -98,7 +102,7 @@ module MapPrint
     end
 
     def folder_name
-      "cache/#{provider_name}/#{@z}/#{@x}"
+      "cache/#{cache_name}/#{@z}/#{@x}"
     end
 
   end
