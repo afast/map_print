@@ -9,6 +9,7 @@ require_relative 'scalebar_handler'
 require_relative 'image_handler'
 require_relative 'text_handler'
 require_relative 'legend_handler'
+require_relative 'geo_json_handler'
 
 module MapPrint
   class Core
@@ -54,9 +55,12 @@ module MapPrint
     private
     def print_pdf
       pdf = init_pdf
-      map = print_layers
+      map_image = print_layers
+      map_image = print_geojson(MiniMagick::Image.new(map_image.path))
 
-      pdf.image map.path, at: [@map[:position][:x], pdf.bounds.top - @map[:position][:y]]
+      FileUtils.cp map_image.path, './map.png'
+
+      pdf.image map_image.path, at: [@map[:position][:x], pdf.bounds.top - @map[:position][:y]]
 
       print_images_on_pdf(pdf)
       print_texts_on_pdf(pdf)
@@ -81,15 +85,26 @@ module MapPrint
       file = LayerHandler.new(@map[:layers], @map[:sw], @map[:ne], @map[:zoom]).process
       size = @map[:size]
 
+      FileUtils.cp file.path, 'layers.png'
+
       if size
         image = MiniMagick::Image.new(file.path)
         size[:width] ||= image.width
         size[:height] ||= image.height
         puts "Fitting map image (#{image.width}x#{image.height}) in #{size[:width]}x#{size[:height]}"
-        image.resize "#{size[:width]}x#{size[:height]}\>"
+        image.colorspace("RGB").resize("#{size[:width]}x#{size[:height]}\>").colorspace("sRGB").unsharp "0x0.75+0.75+0.008"
       end
 
       file
+    end
+
+    def print_geojson(map_image)
+      geojson_image = GeoJSONHandler.new(@map[:geojson], @map[:sw], @map[:ne], map_image.width, map_image.height).process
+      result = MiniMagick::Image.open(map_image.path).composite(geojson_image) do |c|
+        c.compose "atop"
+      end
+      result.write map_image.path
+      map_image
     end
 
     def print_images_on_pdf(pdf)

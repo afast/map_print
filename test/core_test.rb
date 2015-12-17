@@ -16,7 +16,7 @@ class CoreTest < Minitest::Test
         lat: -29.980172,
         lng: -52.959305
       },
-      zoom: 10,
+      zoom: 9,
       position: { # on the PDF
         x: 50,
         y: 50
@@ -27,16 +27,11 @@ class CoreTest < Minitest::Test
       },
       layers: [{
         type: 'osm', # to understand variable substitution and stitching toghether the final image
-        urls: ['http://a.tile.openstreetmap.org/${z}/${x}/${y}.png'],
-        level: 3,
+        urls: ['http://a.tile.thunderforest.com/transport/${z}/${x}/${y}.png'],
+        level: 1,
         opacity: 1.0 # in case you want the layer to have some transparency
-      },
-      {
-        type: 'osm',
-        urls: ['http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png'],
-        level: 2,
-        opacity: 1.0
-      }]
+      }],
+      geojson: '{"type":"Feature", "geometry":{"type":"Point", "coordinates":[-32.026862,-55.425003]}, "properties":{"image": "./marker.png"}}'
     },
     images: [
       {
