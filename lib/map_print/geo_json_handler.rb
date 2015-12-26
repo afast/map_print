@@ -28,15 +28,19 @@ module MapPrint
     def draw_geojson
       if @geojson['type'] == 'Feature'
         feature(@geojson['geometry'], @geojson['properties'])
+      elsif @geojson['type'] == 'FeatureCollection'
+        feature_collection(@geojson['features'])
       else
         puts "Warning, expected type Feature with #{@geojson['type']} inside geometry and drawing properties, like: {'type': 'Feature', 'geometry':#{@geojson.to_json}, 'properties':{'image': 'path/or/url/to/image'}}"
       end
     end
 
-    def feature(geometry, properties)
+    def feature(geometry, properties={})
       case geometry['type']
       when 'Feature'
         feature(geometry['geometry'], geometry['properties'])
+      when 'FeatureCollection'
+        feature_collection(geometry['features'])
       when 'Point'
         point(geometry, properties['image'])
       when 'LineString'
@@ -54,6 +58,12 @@ module MapPrint
       end
     end
 
+    def feature_collection(features)
+      features.each do |object|
+        feature(object)
+      end
+    end
+
     def point(point, image_path)
       x = get_x(point['coordinates'][1])
       y = get_y(point['coordinates'][0])
@@ -65,6 +75,23 @@ module MapPrint
       @image.composite(point_image) do |c|
         c.geometry("+#{x}+#{y}")
       end.write @image.path
+    end
+
+    def line_string(geometry, properties)
+      properties ||= {}
+      puts 'Printed line string!'
+      points = geometry['coordinates'].map do |coord|
+        "#{get_x(coord[1])},#{get_y(coord[0])}"
+      end
+
+      draw_command = (0..(points.length - 2)).map do |i|
+        "line #{points[i]} #{points[i+1]}"
+      end.join(' ')
+
+      @image.combine_options do |c|
+        c.fill(properties['color'] || 'white')
+        c.draw draw_command
+      end
     end
 
     private

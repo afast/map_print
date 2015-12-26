@@ -31,7 +31,18 @@ class CoreTest < Minitest::Test
         level: 1,
         opacity: 1.0 # in case you want the layer to have some transparency
       }],
-      geojson: '{"type":"Feature", "geometry":{"type":"Point", "coordinates":[-32.026862,-55.425003]}, "properties":{"image": "./marker.png"}}'
+      geojson: '{
+        "type": "FeatureCollection",
+        "features": [{
+          "type":"Feature",
+          "geometry":{"type":"Point", "coordinates":[-32.026862,-55.425003]},
+          "properties":{"image": "./marker.png"}
+        }, {
+          "type": "Feature",
+          "geometry": {"type": "LineString", "coordinates": [ [-32.026862,-55.425003], [-31.026862,-55.425003], [-31.026862,-54.425003], [-32.026862,-54.425003] ] },
+          "properties": {"color": "#000000"}
+        }]
+      }'
     },
     images: [
       {
