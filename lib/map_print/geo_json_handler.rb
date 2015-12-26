@@ -79,7 +79,6 @@ module MapPrint
 
     def line_string(geometry, properties)
       properties ||= {}
-      puts 'Printed line string!'
       points = geometry['coordinates'].map do |coord|
         "#{get_x(coord[1])},#{get_y(coord[0])}"
       end
@@ -91,6 +90,19 @@ module MapPrint
       @image.combine_options do |c|
         c.fill(properties['color'] || 'white')
         c.draw draw_command
+      end
+    end
+
+    def polygon(geometry, properties)
+      properties ||= {}
+      puts 'Printed polygon string!'
+      points = geometry['coordinates'].map do |coord|
+        "#{get_x(coord[1])},#{get_y(coord[0])}"
+      end
+
+      @image.combine_options do |c|
+        c.fill(properties['color'] || 'white')
+        c.draw "polygon #{points.join(' ')}"
       end
     end
 

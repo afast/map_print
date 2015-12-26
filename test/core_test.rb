@@ -41,6 +41,10 @@ class CoreTest < Minitest::Test
           "type": "Feature",
           "geometry": {"type": "LineString", "coordinates": [ [-32.026862,-55.425003], [-31.026862,-55.425003], [-31.026862,-54.425003], [-32.026862,-54.425003] ] },
           "properties": {"color": "#000000"}
+        }, {
+          "type": "Feature",
+          "geometry": {"type": "Polygon", "coordinates": [ [-32.126862,-55.825003], [-31.426862,-55.225003], [-31.326862,-54.825003], [-32.146862,-54.835003] ] },
+          "properties": {"color": "#000000"}
         }]
       }'
     },
