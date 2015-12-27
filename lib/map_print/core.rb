@@ -58,7 +58,7 @@ module MapPrint
       map_image = print_layers
       map_image = print_geojson(MiniMagick::Image.new(map_image.path))
 
-      FileUtils.cp map_image.path, './map.png'
+      FileUtils.cp map_image.path, './map.png' if defined?(DEBUG)
 
       pdf.image map_image.path, at: [@map[:position][:x], pdf.bounds.top - @map[:position][:y]]
 
@@ -71,6 +71,14 @@ module MapPrint
     end
 
     def print_png
+      map_image = print_layers
+      map_image = print_geojson(MiniMagick::Image.new(map_image.path))
+
+      print_images_on_png(map_image)
+      print_texts_on_png(map_image)
+      print_legend_on_png(map_image)
+
+      FileUtils.cp map_image.path, @output_path
     end
 
     def init_file
@@ -85,7 +93,7 @@ module MapPrint
       file = LayerHandler.new(@map[:layers], @map[:sw], @map[:ne], @map[:zoom]).process
       size = @map[:size]
 
-      FileUtils.cp file.path, 'layers.png'
+      FileUtils.cp file.path, 'layers.png' if defined?DEBUG
 
       if size
         image = MiniMagick::Image.new(file.path)
@@ -117,6 +125,15 @@ module MapPrint
     end
 
     def print_legend_on_pdf(pdf)
+    end
+
+    def print_images_on_png(png)
+    end
+
+    def print_texts_on_png(png)
+    end
+
+    def print_legend_on_png(png)
     end
   end
 end

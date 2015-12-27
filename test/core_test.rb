@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class CoreTest < Minitest::Test
+  DEBUG = true
   BASIC_MAP = {
     format: 'pdf',
     pdf_options: {
@@ -102,5 +103,13 @@ class CoreTest < Minitest::Test
     File.delete './map.pdf' if File.exist?('./map.pdf')
     MapPrint::Core.new('./map.pdf', BASIC_MAP).print
     assert File.exist?('./map.pdf')
+    File.delete './map.pdf'
+  end
+
+  def test_assert_printed_png
+    File.delete './map.png' if File.exist?('./map.png')
+    MapPrint::Core.new('./map.png', BASIC_MAP.merge(format: 'png')).print
+    assert File.exist?('./map.png')
+    File.delete './map.png'
   end
 end
