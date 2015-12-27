@@ -20,18 +20,7 @@ module MapPrint
       'osm'  => MapPrint::Providers::OpenStreetMap
     }
 
-    def self.print(provider_name, south_west, north_east, zoom)
-      provider_class = PROVIDERS[provider_name]
-      provider = provider_class.new(south_west, north_east, zoom)
-      provider.download
-    end
-
-    def self.get_layer(south_west, north_east, zoom)
-      provider = MapPrint::Providers::OpenStreetMap.new(south_west, north_east, zoom)
-      provider.download
-    end
-
-    def initialize(output_path, args)
+    def initialize(args)
       @format = args[:format]
       @pdf_options = args[:pdf_options]
       @map = args[:map]
@@ -39,10 +28,11 @@ module MapPrint
       @texts = args[:texts]
       @legend = args[:legend]
       @scalebar = args[:scalebar]
-      @output_path = output_path
     end
 
-    def print
+    def print(output_path)
+      @output_path = output_path
+
       if @format == 'pdf'
         print_pdf
       elsif @format == 'png'
@@ -107,11 +97,14 @@ module MapPrint
     end
 
     def print_geojson(map_image)
-      geojson_image = GeoJSONHandler.new(@map[:geojson], @map[:sw], @map[:ne], map_image.width, map_image.height).process
-      result = MiniMagick::Image.open(map_image.path).composite(geojson_image) do |c|
-        c.compose "atop"
+      if @map[:geojson]
+        geojson_image = GeoJSONHandler.new(@map[:geojson], @map[:sw], @map[:ne], map_image.width, map_image.height).process
+        result = MiniMagick::Image.open(map_image.path).composite(geojson_image) do |c|
+          c.compose "atop"
+        end
+        result.write map_image.path
       end
-      result.write map_image.path
+
       map_image
     end
 

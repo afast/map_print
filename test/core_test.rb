@@ -95,20 +95,20 @@ class CoreTest < Minitest::Test
   }
 
   def test_print_returns_file_path
-    map_print = MapPrint::Core.new('./map.pdf', BASIC_MAP)
-    assert_equal './map.pdf', map_print.print
+    map_print = MapPrint::Core.new(BASIC_MAP)
+    assert_equal './map.pdf', map_print.print('./map.pdf')
   end
 
   def test_assert_printed_file_exists
     File.delete './map.pdf' if File.exist?('./map.pdf')
-    MapPrint::Core.new('./map.pdf', BASIC_MAP).print
+    MapPrint::Core.new(BASIC_MAP).print('./map.pdf')
     assert File.exist?('./map.pdf')
     File.delete './map.pdf'
   end
 
   def test_assert_printed_png
     File.delete './map.png' if File.exist?('./map.png')
-    MapPrint::Core.new('./map.png', BASIC_MAP.merge(format: 'png')).print
+    MapPrint::Core.new(BASIC_MAP.merge(format: 'png')).print('./map.png')
     assert File.exist?('./map.png')
     File.delete './map.png'
   end
