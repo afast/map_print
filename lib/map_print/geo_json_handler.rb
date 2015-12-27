@@ -88,25 +88,42 @@ module MapPrint
       end.join(' ')
 
       @image.combine_options do |c|
-        c.fill(properties['color'] || 'white')
-        c.draw draw_command
+        c.draw "#{draw_options(properties)} #{draw_command}"
       end
     end
 
     def polygon(geometry, properties)
       properties ||= {}
-      puts 'Printed polygon string!'
       points = geometry['coordinates'].map do |coord|
         "#{get_x(coord[1])},#{get_y(coord[0])}"
       end
 
       @image.combine_options do |c|
-        c.fill(properties['color'] || 'white')
-        c.draw "polygon #{points.join(' ')}"
+        c.draw "#{draw_options(properties, false)} polygon #{points.join(' ')}"
       end
     end
 
     private
+    def draw_options(properties, line=true)
+      options = ''
+      if properties['stroke'] || properties['stroke'].nil?
+        options += "stroke #{properties['color'] || '#0033ff'} "
+        options += "stroke-width #{properties['weight'] || 5} "
+        options += "stroke-opacity #{properties['opacity'] || 0.5} "
+      end
+
+      if properties['fill'] || (!line && properties['fill'].nil?)
+        options += "fill #{properties['fillColor'] || '#0033ff'} "
+        options += "fill-opacity #{properties['fillOpacity'] || 0.2} "
+        options += "fill-rule #{properties['fillRule'] || 'evenodd'} "
+      end
+
+      options += "stroke-dasharray #{properties['dashArray']} " if properties['dashArray']
+      options += "stroke-linecap #{properties['lineCap']} " if properties['lineCap']
+      options += "stroke-linejoin #{properties['lineJoin']} " if properties['lineJoin']
+      options
+    end
+
     def get_x(lng)
       @width * (lng - @left_lng) / @total_lng;
     end
