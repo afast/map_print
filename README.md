@@ -1,5 +1,7 @@
 # MapPrint
 
+[![Gem Version](https://badge.fury.io/rb/map_print@2x.png)](https://badge.fury.io/rb/map_print)
+
 MapPrint allows for exporting many map sources and GeoJSON to a pdf file. Allowing to specify map element, text/image elements as well as printing a legend with the reference and a scale bar.
 
 ## Installation
