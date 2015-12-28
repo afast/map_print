@@ -50,7 +50,10 @@ module MapPrint
 
       FileUtils.cp map_image.path, './map.png' if defined?(DEBUG)
 
-      pdf.image map_image.path, at: [@map[:position][:x], pdf.bounds.top - @map[:position][:y]]
+      size = @map[:size]
+      size[:width] ||= map_image.width
+      size[:height] ||= map_image.height
+      pdf.image map_image.path, at: [@map[:position][:x], pdf.bounds.top - @map[:position][:y]], fit: size.values
 
       print_images_on_pdf(pdf)
       print_texts_on_pdf(pdf)
@@ -68,6 +71,14 @@ module MapPrint
       print_texts_on_png(map_image)
       print_legend_on_png(map_image)
 
+      size = @map[:size]
+      if size
+        size[:width] ||= map_image.width
+        size[:height] ||= map_image.height
+        puts "Fitting map image (#{map_image.width}x#{map_image.height}) in #{size[:width]}x#{size[:height]}"
+        map_image.colorspace("RGB").resize("#{size[:width]}x#{size[:height]}\>").colorspace("sRGB").unsharp "0x0.75+0.75+0.008"
+      end
+
       FileUtils.cp map_image.path, @output_path
     end
 
@@ -81,17 +92,8 @@ module MapPrint
 
     def print_layers
       file = LayerHandler.new(@map[:layers], @map[:sw], @map[:ne], @map[:zoom]).process
-      size = @map[:size]
 
-      FileUtils.cp file.path, 'layers.png' if defined?DEBUG
-
-      if size
-        image = MiniMagick::Image.new(file.path)
-        size[:width] ||= image.width
-        size[:height] ||= image.height
-        puts "Fitting map image (#{image.width}x#{image.height}) in #{size[:width]}x#{size[:height]}"
-        image.colorspace("RGB").resize("#{size[:width]}x#{size[:height]}\>").colorspace("sRGB").unsharp "0x0.75+0.75+0.008"
-      end
+      FileUtils.cp file.path, 'layers.png' if defined?(DEBUG)
 
       file
     end
