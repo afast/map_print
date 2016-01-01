@@ -1,13 +1,13 @@
 PATH
   remote: .
   specs:
-    map_print (0.1.0)
+    map_print (0.2.1)
       geo-distance (~> 0.1)
       mini_magick (~> 4.3)
-      parallel (~> 1.6.1)
+      parallel (~> 1.6)
       prawn (~> 2.0)
       prawn-fast-png (~> 0.2.3)
-      thor
+      thor (~> 0.19)
 
 GEM
   remote: https://rubygems.org/

@@ -114,6 +114,9 @@ module MapPrint
     end
 
     def print_texts_on_pdf(pdf)
+      if @texts
+        TextHandler.new(@texts, pdf).process
+      end
     end
 
     def print_scalebar
