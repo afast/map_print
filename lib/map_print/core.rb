@@ -111,6 +111,9 @@ module MapPrint
     end
 
     def print_images_on_pdf(pdf)
+      if @images
+        ImageHandler.new(@images, pdf).process
+      end
     end
 
     def print_texts_on_pdf(pdf)
