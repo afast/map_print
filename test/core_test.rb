@@ -122,5 +122,6 @@ class CoreTest < Minitest::Test
 
   def teardown
     File.delete('./map.png') if File.exist?('./map.png')
+    File.delete('./map.pdf') if File.exist?('./map.pdf')
   end
 end
