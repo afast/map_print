@@ -8,6 +8,11 @@ class CoreTest < Minitest::Test
       page_size: 'A4', # A0-10, B0-10, C0-10
       page_layout: :portrait # :landscape
     },
+    png_options: {
+      width: 800,
+      height: 1000,
+      background_color: '#ffffff'
+    },
     map: {
       sw: {
         lat: -35.026862,
@@ -63,17 +68,21 @@ class CoreTest < Minitest::Test
     },
     images: [
       {
-        path: './file.png',
-        position: {x: 50, y: 50 },
-        size: {width: 50, height: 50},
-        options: {}
+        path: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+        position: {x: 100, y: 10 },
+        options: {
+          fit: {
+            width: 25,
+            height: 25
+          }
+        }
       }
     ],
     texts: [
       {
         text: "some text",
-        position: {x: 50, y: 50 },
-        size: {width: 50, height: 50},
+        position: {x: 50, y: 0 },
+        box_size: {width: 50, height: 50},
         options: {}
       }
     ],
@@ -103,13 +112,15 @@ class CoreTest < Minitest::Test
     File.delete './map.pdf' if File.exist?('./map.pdf')
     MapPrint::Core.new(BASIC_MAP).print('./map.pdf')
     assert File.exist?('./map.pdf')
-    File.delete './map.pdf'
   end
 
   def test_assert_printed_png
     File.delete './map.png' if File.exist?('./map.png')
     MapPrint::Core.new(BASIC_MAP.merge(format: 'png')).print('./map.png')
     assert File.exist?('./map.png')
-    File.delete './map.png'
+  end
+
+  def teardown
+    File.delete('./map.png') if File.exist?('./map.png')
   end
 end

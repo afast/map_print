@@ -6,14 +6,14 @@ require_relative 'providers/bing'
 require_relative 'providers/open_street_map'
 require_relative 'layer_handler'
 require_relative 'scalebar_handler'
-require_relative 'image_handler'
-require_relative 'text_handler'
 require_relative 'legend_handler'
 require_relative 'geo_json_handler'
+require_relative 'pdf_handler'
+require_relative 'png_handler'
 
 module MapPrint
   class Core
-    attr_accessor :map, :images, :texts, :legend, :scalebar
+    attr_accessor :map, :images, :texts, :legend, :scalebar, :pdf_options, :png_options, :output_path
 
     PROVIDERS = {
       'bing' => MapPrint::Providers::Bing,
@@ -23,6 +23,7 @@ module MapPrint
     def initialize(args)
       @format = args[:format]
       @pdf_options = args[:pdf_options]
+      @png_options = args[:png_options]
       @map = args[:map]
       @images = args[:images]
       @texts = args[:texts]
@@ -34,60 +35,15 @@ module MapPrint
       @output_path = output_path
 
       if @format == 'pdf'
-        print_pdf
+        handler = PdfHandler.new(self)
       elsif @format == 'png'
-        print_png
+        handler = PngHandler.new(self)
       else
         raise "Unsupported format: #{@format}"
       end
-    end
 
-    private
-    def print_pdf
-      pdf = init_pdf
-      map_image = print_layers
-      map_image = print_geojson(MiniMagick::Image.new(map_image.path))
-
-      FileUtils.cp map_image.path, './map.png' if defined?(DEBUG)
-
-      size = @map[:size]
-      size[:width] ||= map_image.width
-      size[:height] ||= map_image.height
-      pdf.image map_image.path, at: [@map[:position][:x], pdf.bounds.top - @map[:position][:y]], fit: size.values
-
-      print_images_on_pdf(pdf)
-      print_texts_on_pdf(pdf)
-      print_legend_on_pdf(pdf)
-
-      pdf.render_file(@output_path)
+      handler.print
       @output_path
-    end
-
-    def print_png
-      map_image = print_layers
-      map_image = print_geojson(MiniMagick::Image.new(map_image.path))
-
-      print_images_on_png(map_image)
-      print_texts_on_png(map_image)
-      print_legend_on_png(map_image)
-
-      size = @map[:size]
-      if size
-        size[:width] ||= map_image.width
-        size[:height] ||= map_image.height
-        puts "Fitting map image (#{map_image.width}x#{map_image.height}) in #{size[:width]}x#{size[:height]}"
-        map_image.colorspace("RGB").resize("#{size[:width]}x#{size[:height]}\>").colorspace("sRGB").unsharp "0x0.75+0.75+0.008"
-      end
-
-      FileUtils.cp map_image.path, @output_path
-    end
-
-    def init_file
-      @file = File.open @output_path, 'wb'
-    end
-
-    def init_pdf
-      Prawn::Document.new @pdf_options || {}
     end
 
     def print_layers
@@ -110,28 +66,10 @@ module MapPrint
       map_image
     end
 
-    def print_images_on_pdf(pdf)
-      if @images
-        ImageHandler.new(@images, pdf).process
-      end
-    end
-
-    def print_texts_on_pdf(pdf)
-      if @texts
-        TextHandler.new(@texts, pdf).process
-      end
-    end
-
     def print_scalebar
     end
 
     def print_legend_on_pdf(pdf)
-    end
-
-    def print_images_on_png(png)
-    end
-
-    def print_texts_on_png(png)
     end
 
     def print_legend_on_png(png)
