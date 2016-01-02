@@ -48,6 +48,11 @@ BASIC_MAP = {
       page_size: 'A4', # A0-10, B0-10, C0-10
       page_layout: :portrait # :portrait, :landscape
     },
+    png_options: {
+      width: 800,
+      height: 1000,
+      background_color: '#ffffff'
+    },
     map: {
       sw: { # required
         lat: -35.026862,
@@ -101,19 +106,23 @@ BASIC_MAP = {
         }]
       }'
     },
-    images: [ # not supported yet
+    images: [
       {
         path: './file.png',
         position: {x: 50, y: 50 },
-        size: {width: 50, height: 50},
-        options: {}
+        options: {
+          fit: {
+            width: 25,
+            height: 25
+          }
+        }
       }
     ],
-    texts: [ # not supported yet
+    texts: [
       {
         text: "some text",
         position: {x: 50, y: 50 },
-        size: {width: 50, height: 50},
+        box_size: {width: 50, height: 50},
         options: {}
       }
     ],
