@@ -88,12 +88,32 @@ class CoreTest < Minitest::Test
     ],
     legend: {
       position: {x: 50, y: 50},
-      size: {width: 50, height: 50},
+      size: {width: 400, height: 100},
+      image_size: {width: 16, height: 16},
+      textbox_size: {width: 40, height: 16},
+      image_textbox_separation: 5,
+      orientation: 'horizontal', # horizontal, vertical
+      overflow: 'hidden', # expand, hidden, compact
       columns: 5,
       rows: 5,
       elements: [{
-        image: './file.png',
-        text: 'text'
+        image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+        text: 'marker legend'
+      },{
+        image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+        text: 'marker legend2'
+      },{
+        image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+        text: 'marker legend3'
+      },{
+        image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+        text: 'marker legend4'
+      },{
+        image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+        text: 'marker legend5'
+      },{
+        image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+        text: 'marker legend6'
       }]
     },
     scalebar: {

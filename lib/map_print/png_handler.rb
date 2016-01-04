@@ -18,7 +18,9 @@ module MapPrint
 
       print_images(@context.images, @png)
       print_texts(@context.texts, @png)
-      # print_legend_on_png
+
+      legend_image = @context.print_legend
+      print_legend(MiniMagick::Image.new(legend_image.path))
     end
 
     def print_map
@@ -39,6 +41,17 @@ module MapPrint
 
       result = @png.composite(map_image) do |c|
         c.geometry geometry
+      end
+      result.write @context.output_path
+    end
+
+    def print_legend(legend_image)
+      if @context.legend[:position]
+        geometry = "+#{@context.legend[:position][:x] || 0}+#{@context.legend[:position][:y] || 0}"
+      end
+
+      result = @png.composite(legend_image) do |c|
+        c.geometry geometry if geometry
       end
       result.write @context.output_path
     end

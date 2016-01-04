@@ -123,12 +123,29 @@ BASIC_MAP = {
         text: "some text",
         position: {x: 50, y: 50 },
         box_size: {width: 50, height: 50},
-        options: {}
+        options: {
+          fill_color: '#ffffff',
+          color: '#000000',
+          font: 'Arial',
+          pointsize: '16',
+          gravity: 'NorthWest',
+        }
       }
     ],
     legend: { # not supported yet
       position: {x: 50, y: 50},
       size: {width: 50, height: 50},
+      image_size: {width: 16, height: 16},
+      textbox_size: {width: 40, height: 16},
+      textbox_style: {
+        fill_color: '#ffffff',
+        color: '#000000',
+        font: 'Arial',
+        pointsize: '16',
+        gravity: 'NorthWest',
+      },
+      orientation: 'horizontal', # horizontal, vertical
+      overflow: 'hidden', # expand, hidden, compact
       columns: 5,
       rows: 5,
       elements: [{

@@ -16,7 +16,9 @@ module MapPrint
       print_map
       print_images(@context.images, @pdf)
       print_texts(@context.texts, @pdf)
-      # print_legend_on_pdf(@pdf)
+
+      legend_image = @context.print_legend
+      @pdf.image legend_image.path, at: [@context.legend[:position][:x], @pdf.bounds.top - @context.legend[:position][:y]]
 
       @pdf.render_file(@context.output_path)
     end

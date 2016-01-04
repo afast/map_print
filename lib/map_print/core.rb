@@ -69,10 +69,8 @@ module MapPrint
     def print_scalebar
     end
 
-    def print_legend_on_pdf(pdf)
-    end
-
-    def print_legend_on_png(png)
+    def print_legend
+      LegendHandler.new(@legend).process
     end
   end
 end
