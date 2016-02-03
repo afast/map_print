@@ -19,8 +19,11 @@ module MapPrint
       print_images(@context.images, @png)
       print_texts(@context.texts, @png)
 
+      scalebar_image = @context.print_scalebar
+      overlay_image(MiniMagick::Image.new(scalebar_image.path), @context.scalebar[:position])
+
       legend_image = @context.print_legend
-      print_legend(MiniMagick::Image.new(legend_image.path))
+      overlay_image(MiniMagick::Image.new(legend_image.path), @context.legend[:position])
     end
 
     def print_map
@@ -35,22 +38,15 @@ module MapPrint
         geometry += size[:height].to_s if size[:height]
       end
 
-      if @context.map[:position]
-        geometry += "+#{@context.map[:position][:x] || 0}+#{@context.map[:position][:y] || 0}"
-      end
-
-      result = @png.composite(map_image) do |c|
-        c.geometry geometry
-      end
-      result.write @context.output_path
+      overlay_image(map_image, @context.map[:position], geometry)
     end
 
-    def print_legend(legend_image)
-      if @context.legend[:position]
-        geometry = "+#{@context.legend[:position][:x] || 0}+#{@context.legend[:position][:y] || 0}"
-      end
+    private
+    def overlay_image(image, position, size_geometry='')
+      geometry = size_geometry
+      geometry += "+#{position[:x] || 0}+#{position[:y] || 0}" if position
 
-      result = @png.composite(legend_image) do |c|
+      result = @png.composite(image) do |c|
         c.geometry geometry if geometry
       end
       result.write @context.output_path

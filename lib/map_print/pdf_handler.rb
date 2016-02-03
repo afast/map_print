@@ -17,6 +17,9 @@ module MapPrint
       print_images(@context.images, @pdf)
       print_texts(@context.texts, @pdf)
 
+      scalebar_image = @context.print_scalebar
+      @pdf.image scalebar_image.path, at: [@context.scalebar[:position][:x], @pdf.bounds.top - @context.scalebar[:position][:y]]
+
       legend_image = @context.print_legend
       @pdf.image legend_image.path, at: [@context.legend[:position][:x], @pdf.bounds.top - @context.legend[:position][:y]]
 

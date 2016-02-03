@@ -67,6 +67,7 @@ module MapPrint
     end
 
     def print_scalebar
+      ScalebarHandler.new(@scalebar, @map[:zoom]).process
     end
 
     def print_legend

@@ -118,8 +118,12 @@ class CoreTest < Minitest::Test
     },
     scalebar: {
       unit: 'meters', # meters, km, miles, feet
-      position: {x: 50, y: 50},
-      size: {width: 50, height: 50}
+      position: {x: 500, y: 550},
+      padding: {top: 5, right: 5, bottom: 5, left: 5},
+      bar_height: 10,
+      background_color: 'black',
+      background_opacity: 0.4,
+      size: {width: 200, height: 40}
     }
   }
 
