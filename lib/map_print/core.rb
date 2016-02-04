@@ -49,8 +49,6 @@ module MapPrint
     def print_layers
       file = LayerHandler.new(@map[:layers], @map[:sw], @map[:ne], @map[:zoom]).process
 
-      FileUtils.cp file.path, 'layers.png' if defined?(DEBUG)
-
       file
     end
 
