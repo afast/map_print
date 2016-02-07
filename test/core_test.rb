@@ -169,6 +169,16 @@ describe MapPrint::Core do
     it 'assigns scalebar' do
       @core.scalebar.wont_be_nil
     end
+
+    describe '#print_scalebar' do
+      it 'generates scalebar image' do
+        @core.print_scalebar.must_be_instance_of MiniMagick::Image
+      end
+
+      it 'generates the legend image' do
+        @core.print_legend.must_be_instance_of MiniMagick::Image
+      end
+    end
   end
 
   describe 'png map' do
@@ -180,6 +190,24 @@ describe MapPrint::Core do
       File.delete './map.png' if File.exist?('./map.png')
       @core.print('./map.png')
       assert File.exist?('./map.png')
+    end
+  end
+
+  describe 'printing layers' do
+    before do
+      @core = MapPrint::Core.new(BASIC_MAP)
+    end
+
+    describe '#print_layers' do
+      it 'generates an image with layers' do
+        @core.print_layers.must_be_instance_of File
+      end
+    end
+
+    describe '#print_geojson' do
+      it 'prints the geojson on the layers' do
+        @core.print_geojson(MiniMagick::Image.new @core.print_layers.path).must_be_instance_of MiniMagick::Image
+      end
     end
   end
 

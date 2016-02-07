@@ -10,6 +10,8 @@ module MapPrint
       @height = height
       @width = width
       @geojson = JSON[geojson]
+    rescue JSON::GeneratorError, JSON::ParserError
+      raise InvalidGeoJSON.new("Invalid GeoJSON: #{geojson.inspect}")
     end
 
     def process
@@ -25,23 +27,26 @@ module MapPrint
       tempfile.close
     end
 
+    private
     def draw_geojson
       if @geojson['type'] == 'Feature'
         feature(@geojson['geometry'], @geojson['properties'])
       elsif @geojson['type'] == 'FeatureCollection'
         feature_collection(@geojson['features'])
       else
-        puts "Warning, expected type Feature with #{@geojson['type']} inside geometry and drawing properties, like: {'type': 'Feature', 'geometry':#{@geojson.to_json}, 'properties':{'image': 'path/or/url/to/image'}}"
+        Logger.warn "Warning, expected type Feature with #{@geojson['type'].inspect} inside geometry and drawing properties, like: {'type': 'Feature', 'geometry':#{@geojson.to_json}, 'properties':{'image': 'path/or/url/to/image'}}"
       end
     end
 
     def feature(geometry, properties={})
+      raise NoGeometryPresent.new("No geometry present for this feature") if geometry.nil?
       case geometry['type']
       when 'Feature'
         feature(geometry['geometry'], geometry['properties'])
       when 'FeatureCollection'
         feature_collection(geometry['features'])
       when 'Point'
+        raise NoPointImage.new("Missing image in point geometry") unless properties && properties['image']
         point(geometry, properties['image'])
       when 'LineString'
         line_string(geometry, properties)
@@ -55,7 +60,11 @@ module MapPrint
         multi_polygon(geometry, properties)
       when 'GeometryCollection'
         geometry_collection(geometry, properties)
+      else
+        Logger.warn "Feature type '#{geometry['type']}' not implemented!"
       end
+    rescue GeoJSONHandlerError => ex
+      Logger.warn ex
     end
 
     def feature_collection(features)
@@ -103,7 +112,22 @@ module MapPrint
       end
     end
 
-    private
+    def multi_point(geometry, properties)
+      raise FeatureNotImplemented.new("Please consider contributing!")
+    end
+
+    def multi_line_string(geometry, properties)
+      raise FeatureNotImplemented.new("Please consider contributing!")
+    end
+
+    def multi_polygon(geometry, properties)
+      raise FeatureNotImplemented.new("Please consider contributing!")
+    end
+
+    def geometry_collection(geometry, properties)
+      raise FeatureNotImplemented.new("Please consider contributing!")
+    end
+
     def draw_options(properties, line=true)
       options = ''
       if properties['stroke'] || properties['stroke'].nil?

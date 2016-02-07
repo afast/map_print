@@ -1,3 +1,4 @@
+require_relative 'logger'
 require_relative 'lat_lng'
 require_relative 'tiles/tile'
 require_relative 'tiles/tile_factory'
@@ -47,9 +48,7 @@ module MapPrint
     end
 
     def print_layers
-      file = LayerHandler.new(@map[:layers], @map[:sw], @map[:ne], @map[:zoom]).process
-
-      file
+      LayerHandler.new(@map[:layers], @map[:sw], @map[:ne], @map[:zoom]).process
     end
 
     def print_geojson(map_image)
