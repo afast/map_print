@@ -2,7 +2,7 @@ module MapPrint
   module PngHandlers
     module Texts
       def print_texts(texts, png)
-        texts.each do |text|
+        (texts || []).each do |text|
           position = "#{text[:position][:x]},#{text[:position][:y]}"
 
           draw_text(png, text[:text], position, text[:options])

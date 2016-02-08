@@ -1,6 +1,5 @@
 require 'prawn'
 require 'mini_magick'
-require 'geo-distance'
 require 'parallel'
 
 require_relative 'base'

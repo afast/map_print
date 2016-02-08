@@ -2,7 +2,7 @@ module MapPrint
   module PdfHandlers
     module Images
       def print_images(images, pdf)
-        images.each do |image|
+        (images || []).each do |image|
           if image[:path] =~ /https?:\/\//
             image_file = open(image[:path])
           else

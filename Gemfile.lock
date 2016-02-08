@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    map_print (0.2.1)
-      geo-distance (~> 0.1)
+    map_print (0.4.0)
       mini_magick (~> 4.3)
       parallel (~> 1.6)
       prawn (~> 2.0)
@@ -12,30 +11,8 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.5)
-      i18n (~> 0.7)
-      json (~> 1.7, >= 1.7.7)
-      minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
-      tzinfo (~> 1.1)
-    geo-distance (0.2.0)
-      geo_point (~> 0.2.5)
-      geo_units (~> 0.2.4.1)
-    geo_calc (0.7.6)
-      activesupport (>= 3.0.1)
-      geo_units (~> 0.2.1)
-      i18n
-      require_all (~> 1.2.0)
-      sugar-high (~> 0.4.6.3)
-    geo_point (0.2.5)
-      geo_calc (~> 0.7.5)
-      geo_units (~> 0.2.1)
-    geo_units (0.2.4.1)
-      sugar-high (~> 0.4.6.2)
-    i18n (0.7.0)
-    json (1.8.3)
-    mini_magick (4.3.6)
-    minitest (5.8.2)
+    mini_magick (4.4.0)
+    minitest (5.8.4)
     parallel (1.6.1)
     pdf-core (0.6.0)
     prawn (2.0.2)
@@ -44,15 +21,10 @@ GEM
     prawn-fast-png (0.2.3)
       prawn
       rmagick
-    rake (10.4.2)
-    require_all (1.2.1)
+    rake (10.5.0)
     rmagick (2.15.4)
-    sugar-high (0.4.6.4)
     thor (0.19.1)
-    thread_safe (0.3.5)
     ttfunk (1.4.0)
-    tzinfo (1.2.2)
-      thread_safe (~> 0.1)
 
 PLATFORMS
   ruby

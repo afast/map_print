@@ -1,21 +1,21 @@
 module MapPrint
   class LayerHandler
     PROVIDERS = {
-      'bing' => MapPrint::Providers::Bing,
-      'osm'  => MapPrint::Providers::OpenStreetMap
+      'bing' => Providers::Bing,
+      'osm'  => Providers::OpenStreetMap
     }
 
     def initialize(layers, south_west, north_east, zoom)
       @layers = layers.sort_by { |layer| layer[:level] }
-      @south_west = MapPrint::LatLng.new(south_west[:lat], south_west[:lng])
-      @north_east = MapPrint::LatLng.new(north_east[:lat], north_east[:lng])
+      @south_west = LatLng.new(south_west[:lat], south_west[:lng])
+      @north_east = LatLng.new(north_east[:lat], north_east[:lng])
       @zoom = zoom
     end
 
     def process
       @layers.each do |layer|
         provider_class = PROVIDERS[layer[:type]]
-        provider = provider_class.new(@south_west, @north_east, @zoom, layer[:urls].first)
+        provider = provider_class.new(@south_west, @north_east, @zoom, layer[:urls] && layer[:urls].first)
         layer[:image] = provider.download
       end
 

@@ -2,7 +2,7 @@ module MapPrint
   module PngHandlers
     module Images
       def print_images(images, png)
-        images.each do |image|
+        (images || []).each do |image|
           image_file = MiniMagick::Image.open(image[:path])
 
           geometry = ''

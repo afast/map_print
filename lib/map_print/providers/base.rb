@@ -2,12 +2,9 @@ require 'tempfile'
 
 module MapPrint
   module Providers
-
     class Base
 
-      attr_accessor :provider
-
-      attr_accessor :south_west, :north_east, :zoom
+      attr_accessor :provider, :south_west, :north_east, :zoom
 
       def initialize(south_west, north_east, zoom, base_url=nil)
         @south_west, @north_east, @zoom = south_west, north_east, zoom
@@ -48,8 +45,6 @@ module MapPrint
         file.close
         result_file
       end
-
     end
-
   end
 end

@@ -2,6 +2,7 @@ module MapPrint
   class LegendHandler
     def initialize(legend)
       @legend = legend
+      validate_data!
     end
 
     def process
@@ -31,7 +32,16 @@ module MapPrint
     end
 
     private
+    def validate_data!
+      raise NoLegendData.new('No legend data present') if @legend.nil? || @legend.empty?
+      raise InvalidSize.new('No legend width present') unless @legend[:size] && @legend[:size][:width]
+      raise InvalidSize.new('No legend height present') unless @legend[:size][:height]
+      raise MissingLayoutInformation.new('Missing column layout information') unless @legend[:columns]
+      raise MissingLayoutInformation.new('Missing rows layout information') unless @legend[:rows]
+    end
+
     def print_vertical(legend_image, x_step, y_step, image_geometry, textbox_offset, text_size)
+      return unless @legend[:elements].is_a?(Array)
       x = 0
       y = 0
       z = 1
@@ -57,6 +67,7 @@ module MapPrint
     end
 
     def print_horizontal(legend_image, x_step, y_step, image_geometry, textbox_offset, text_size)
+      return unless @legend[:elements].is_a?(Array)
       x = 0
       y = 0
       z = 1

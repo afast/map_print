@@ -20,10 +20,14 @@ module MapPrint
       print_texts(@context.texts, @png)
 
       scalebar_image = @context.print_scalebar
-      overlay_image(MiniMagick::Image.new(scalebar_image.path), @context.scalebar[:position])
+      if scalebar_image
+        overlay_image(MiniMagick::Image.new(scalebar_image.path), @context.scalebar[:position])
+      end
 
       legend_image = @context.print_legend
-      overlay_image(MiniMagick::Image.new(legend_image.path), @context.legend[:position])
+      if legend_image
+        overlay_image(MiniMagick::Image.new(legend_image.path), @context.legend[:position])
+      end
     end
 
     def print_map

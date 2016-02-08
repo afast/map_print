@@ -30,6 +30,14 @@ module MapPrint
       end
     end
 
+    def x_size
+      x_array.size
+    end
+
+    def y_size
+      y_array.size
+    end
+
     def tiles
       return @tiles if @tiles
 
@@ -43,14 +51,7 @@ module MapPrint
       @tiles
     end
 
-    def x_size
-      x_array.size
-    end
-
-    def y_size
-      y_array.size
-    end
-
+    private
     def ne_offset
       @ne_lat_lng.get_slippy_map_tile_number(@zoom)[:offset]
     end
@@ -75,16 +76,12 @@ module MapPrint
       @y_array ||= y1 < y2 ? y1..y2 : (y2..y1).to_a
     end
 
-    private
-
     def tile_class
       if @type == 'osm'
         OSMTile
-      elsif @type =~ 'bing'
+      elsif @type =~ /bing/
         BingTile
       end
     end
-
   end
-
 end

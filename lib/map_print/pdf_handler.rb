@@ -18,14 +18,19 @@ module MapPrint
       print_texts(@context.texts, @pdf)
 
       scalebar_image = @context.print_scalebar
-      @pdf.image scalebar_image.path, at: [@context.scalebar[:position][:x], @pdf.bounds.top - @context.scalebar[:position][:y]]
+      if scalebar_image
+        @pdf.image scalebar_image.path, at: [@context.scalebar[:position][:x], @pdf.bounds.top - @context.scalebar[:position][:y]]
+      end
 
       legend_image = @context.print_legend
-      @pdf.image legend_image.path, at: [@context.legend[:position][:x], @pdf.bounds.top - @context.legend[:position][:y]]
+      if legend_image
+        @pdf.image legend_image.path, at: [@context.legend[:position][:x], @pdf.bounds.top - @context.legend[:position][:y]]
+      end
 
       @pdf.render_file(@context.output_path)
     end
 
+    private
     def print_map
       map_image = @context.print_layers
       map_image = @context.print_geojson(MiniMagick::Image.new(map_image.path))

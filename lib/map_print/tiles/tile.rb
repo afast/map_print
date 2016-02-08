@@ -55,8 +55,8 @@ module MapPrint
     def get_pixel_difference(lat_lng)
       tile_lat_lng = tile_number_to_lat_lng
 
-      x_pixels = GeoDistance.distance(lat_lng.lat, lat_lng.lng, lat_lng.lat, tile_lat_lng[:lng]).meters.number / METERS_PER_PIXELS[@z]
-      y_pixels = GeoDistance.distance(lat_lng.lat, lat_lng.lng, tile_lat_lng[:lat], lat_lng.lng).meters.number / METERS_PER_PIXELS[@z]
+      x_pixels = lat_lng.distance_to(LatLng.new(lat_lng.lat, tile_lat_lng[:lng])) / METERS_PER_PIXELS[@z]
+      y_pixels = lat_lng.distance_to(LatLng.new(tile_lat_lng[:lat], lat_lng.lng)) / METERS_PER_PIXELS[@z]
 
       { x: x_pixels, y: y_pixels }
     end

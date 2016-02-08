@@ -6,7 +6,7 @@ describe MapPrint::GeoJSONHandler do
       "features": [{
         "type":"Feature",
         "geometry":{"type":"Point", "coordinates":[-32.026862,-55.425003]},
-        "properties":{"image": "./marker.png"}
+        "properties":{"image": "./test/assets/marker.png"}
       }, {
         "type": "Feature",
         "geometry": {"type": "LineString", "coordinates": [ [-32.026862,-55.425003], [-31.026862,-55.425003], [-31.026862,-54.425003], [-32.026862,-54.425003] ] },

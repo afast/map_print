@@ -1,6 +1,5 @@
 require 'test_helper'
 
-
 BASIC_MAP = {
   format: 'pdf',
   pdf_options: {
@@ -41,7 +40,7 @@ BASIC_MAP = {
       "features": [{
         "type":"Feature",
         "geometry":{"type":"Point", "coordinates":[-32.026862,-55.425003]},
-        "properties":{"image": "./marker.png"}
+        "properties":{"image": "test/assets/marker.png"}
       }, {
         "type": "Feature",
         "geometry": {"type": "LineString", "coordinates": [ [-32.026862,-55.425003], [-31.026862,-55.425003], [-31.026862,-54.425003], [-32.026862,-54.425003] ] },
@@ -96,22 +95,22 @@ BASIC_MAP = {
     columns: 5,
     rows: 5,
     elements: [{
-      image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+      image: 'test/assets/marker.png',
       text: 'marker legend'
     },{
-      image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+      image: 'test/assets/marker.png',
       text: 'marker legend2'
     },{
-      image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+      image: 'test/assets/marker.png',
       text: 'marker legend3'
     },{
-      image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+      image: 'test/assets/marker.png',
       text: 'marker legend4'
     },{
-      image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+      image: 'test/assets/marker.png',
       text: 'marker legend5'
     },{
-      image: 'https://pixabay.com/static/uploads/photo/2014/04/03/10/03/google-309741_960_720.png',
+      image: 'test/assets/marker.png',
       text: 'marker legend6'
     }]
   },

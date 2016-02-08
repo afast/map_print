@@ -2,7 +2,7 @@ module MapPrint
   module PdfHandlers
     module Texts
       def print_texts(texts, pdf)
-        texts.each do |text|
+        (texts || []).each do |text|
           pdf.text_box text[:text], text_options(text)
         end
       end

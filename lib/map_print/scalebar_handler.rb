@@ -38,6 +38,7 @@ module MapPrint
         @padding_top = 0
         @padding_bottom = 0
       end
+      validate_data!
     end
 
     def process
@@ -49,7 +50,7 @@ module MapPrint
       pixels_for_distance = get_distance_in_units
       quarter = (size[:width] - @padding_left - @padding_right) / 4
 
-      y_position = size[:height] - @scalebar[:bar_height] - @padding_bottom
+      y_position = size[:height] - (@scalebar[:bar_height] || 10) - @padding_bottom
       image.combine_options do |c|
         c.stroke 'black'
         c.fill 'white'
@@ -72,6 +73,13 @@ module MapPrint
     end
 
     private
+    def validate_data!
+      raise NoScalebarData.new('No scalebar data present') if @scalebar.nil? || @scalebar.empty?
+      raise InvalidScalebarSize.new('No scalebar width present') unless @scalebar[:size] && @scalebar[:size][:width]
+      raise InvalidScalebarSize.new('No scalebar height present') unless @scalebar[:size][:height]
+      raise InvalidScalebarZoom.new('Zoom must be between 0..18') unless (0..18).include?(@zoom)
+    end
+
     def get_distance_in_units
       padding = @padding_left + @padding_right
       meters = (@scalebar[:size][:width] - padding) * ZOOM_METERS_PER_PIXEL[@zoom]

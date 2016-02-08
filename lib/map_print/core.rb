@@ -64,11 +64,15 @@ module MapPrint
     end
 
     def print_scalebar
-      ScalebarHandler.new(@scalebar, @map[:zoom]).process
+      if @scalebar
+        ScalebarHandler.new(@scalebar, @map[:zoom]).process
+      end
     end
 
     def print_legend
-      LegendHandler.new(@legend).process
+      if @legend
+        LegendHandler.new(@legend).process
+      end
     end
   end
 end
