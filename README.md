@@ -1,6 +1,9 @@
 # MapPrint
 
 [![Gem Version](https://badge.fury.io/rb/map_print.svg)](https://badge.fury.io/rb/map_print)
+[![Build Status](https://travis-ci.org/afast/map_print.svg?branch=master)](https://travis-ci.org/afast/map_print)
+[![Code Climate](https://codeclimate.com/github/afast/map_print/badges/gpa.svg)](https://codeclimate.com/github/afast/map_print)
+[![Test Coverage](https://codeclimate.com/github/afast/map_print/badges/coverage.svg)](https://codeclimate.com/github/afast/map_print/coverage)
 
 MapPrint allows for exporting many map sources and GeoJSON to a pdf file. Allowing to specify map element, text/image elements as well as printing a legend with the reference and a scale bar.
 
