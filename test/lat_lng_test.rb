@@ -23,11 +23,11 @@ describe MapPrint::LatLng do
     end
 
     it 'returns x offset' do
-      slippy_map_tile_number[:offset][:x].must_equal 0.3400497777777787
+      slippy_map_tile_number[:offset][:x].round(12).must_equal 0.340049777778
     end
 
     it 'returns y offset' do
-      slippy_map_tile_number[:offset][:y].must_equal 0.36446621522523515
+      slippy_map_tile_number[:offset][:y].round(12).must_equal 0.364466215225
     end
   end
 end
