@@ -182,7 +182,7 @@ map_configuration = {
         }
       }
     ],
-    legend: { # not supported yet
+    legend: {
       position: {x: 50, y: 50},
       size: {width: 50, height: 50},
       image_size: {width: 16, height: 16},
@@ -203,7 +203,7 @@ map_configuration = {
         text: 'text'
       }]
     },
-    scalebar: { # not supported yet
+    scalebar: {
       unit: 'meters', # meters, km, miles, feet
       position: {x: 500, y: 550},
       size: {width: 200, height: 40},
