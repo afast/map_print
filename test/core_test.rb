@@ -125,6 +125,41 @@ BASIC_MAP = {
   }
 }
 
+MINIMUM_MAP = {
+  png_options: {
+    width: 800,
+    height: 1000
+  },
+  map: {
+    sw: {
+      lat: -35.026862,
+      lng: -58.425003
+    },
+    ne: {
+      lat: -29.980172,
+      lng: -52.959305
+    },
+    zoom: 9,
+    layers: [{type: 'osm'}]
+  }
+}
+
+MINIMUM_PDF_MAP = {
+  format: 'pdf',
+  map: {
+    sw: {
+      lat: -35.026862,
+      lng: -58.425003
+    },
+    ne: {
+      lat: -29.980172,
+      lng: -52.959305
+    },
+    zoom: 9,
+    layers: [{type: 'osm'}]
+  }
+}
+
 describe MapPrint::Core do
   before do
     stub_request(:any, /.*.openstreetmap.org.*/).
@@ -218,6 +253,38 @@ describe MapPrint::Core do
       it 'prints the geojson on the layers' do
         @core.print_geojson(MiniMagick::Image.new @core.print_layers.path).must_be_instance_of MiniMagick::Image
       end
+    end
+  end
+
+  describe 'mininum map' do
+    it 'throws error for no png_options' do
+      proc {
+        MapPrint::Core.new({}).print('./minimum_map.png')
+      }.must_raise MapPrint::ParameterError
+    end
+
+    it 'throws error for no width' do
+      proc {
+        MapPrint::Core.new({png_options: {height: 100}}).print('./minimum_map.png')
+      }.must_raise MapPrint::ParameterError
+    end
+
+    it 'throws an error for no height' do
+      proc {
+        MapPrint::Core.new({png_options: {width: 100}}).print('./minimum_map.png')
+      }.must_raise MapPrint::ParameterError
+    end
+
+    it 'generates a png map' do
+      MapPrint::Core.new(MINIMUM_MAP).print('./minimum_map.png')
+      assert File.exists?('./minimum_map.png')
+      File.delete('./minimum_map.png')
+    end
+
+    it 'generates a pdf map' do
+      MapPrint::Core.new(MINIMUM_PDF_MAP).print('./minimum_map.png')
+      assert File.exists?('./minimum_map.png')
+      File.delete('./minimum_map.png')
     end
   end
 

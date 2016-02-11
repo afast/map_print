@@ -14,4 +14,7 @@ module MapPrint
   class NoScalebarData < ScalebarHandlerError; end
   class InvalidScalebarSize < ScalebarHandlerError; end
   class InvalidScalebarZoom < ScalebarHandlerError; end
+
+  class CoreError < StandardError; end
+  class ParameterError < CoreError; end
 end

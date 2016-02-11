@@ -11,7 +11,9 @@ module MapPrint
     end
 
     def print
-      `convert -size #{@context.png_options[:width]}x#{@context.png_options[:height]} xc:#{@context.png_options[:background_color]} #{@context.output_path}`
+      raise ParameterError.new('Missing png_options width attribute') unless @context.png_options && @context.png_options[:width]
+      raise ParameterError.new('Missing png_options height attribute') unless @context.png_options[:height]
+      `convert -size #{@context.png_options[:width]}x#{@context.png_options[:height]} xc:#{@context.png_options[:background_color] || 'transparent'} #{@context.output_path}`
       @png = MiniMagick::Image.new @context.output_path
 
       print_map
@@ -51,7 +53,7 @@ module MapPrint
       geometry += "+#{position[:x] || 0}+#{position[:y] || 0}" if position
 
       result = @png.composite(image) do |c|
-        c.geometry geometry if geometry
+        c.geometry geometry unless geometry.nil? || geometry.empty?
       end
       result.write @context.output_path
     end

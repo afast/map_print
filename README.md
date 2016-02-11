@@ -37,12 +37,59 @@ This is intended to be more of a testing method as it doesn't support all the op
 
 ### In ruby code
 
-The mos common usage you'll be expecting is to create a new instance with the map configuration and then call `print` with the output path. MapPrint will take the map configuration, generate the map and write the output to the output path. In the example below `./map.png`.
+The most common usage will be creating a new instance with the map configuration and then call `print` with the output path. MapPrint will take the map configuration, generate the map and write the output to the output path. In the example below `./map.png`.
 
 ```ruby
-MapPrint::Core.new(map_configuration).print('./map.png')```
+MapPrint::Core.new(map_configuration).print('./map.png')
+```
 
-`map_configuration` is a hash with the following options:
+`map_configuration` is a hash which contains all the necessary fields to print a map.
+For detailed information about what `map_print` expects in a hash please look at the wiki.
+
+The minimum hash to generate a PNG:
+
+```ruby
+{
+  png_options: {
+    width: 800,
+    height: 1000
+  },
+  map: {
+    sw: {
+      lat: -35.026862,
+      lng: -58.425003
+    },
+    ne: {
+      lat: -29.980172,
+      lng: -52.959305
+    },
+    zoom: 9,
+    layers: [{type: 'osm'}]
+  }
+}
+```
+
+The minimum hash to generate a PDF:
+
+```ruby
+{
+  format: 'pdf',
+  map: {
+    sw: {
+      lat: -35.026862,
+      lng: -58.425003
+    },
+    ne: {
+      lat: -29.980172,
+      lng: -52.959305
+    },
+    zoom: 9,
+    layers: [{type: 'osm'}]
+  }
+}
+```
+
+A full example showing all the available options:
 
 ```ruby
 BASIC_MAP = {

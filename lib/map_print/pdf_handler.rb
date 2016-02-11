@@ -35,10 +35,12 @@ module MapPrint
       map_image = @context.print_layers
       map_image = @context.print_geojson(MiniMagick::Image.new(map_image.path))
 
-      size = @context.map[:size]
+      size = @context.map[:size] || {}
       size[:width] ||= map_image.width
       size[:height] ||= map_image.height
-      @pdf.image map_image.path, at: [@context.map[:position][:x], @pdf.bounds.top - @context.map[:position][:y]], fit: size.values
+
+      position = @context.map[:position] || {}
+      @pdf.image map_image.path, at: [position[:x] || 0, @pdf.bounds.top - (position[:y] || 0)], fit: size.values
     end
   end
 end

@@ -30,6 +30,10 @@ module MapPrint
       @texts = args[:texts]
       @legend = args[:legend]
       @scalebar = args[:scalebar]
+      raise ParameterError.new("Please indicate the southwest point for the map ({map: {sw: {lat: -35.026862, lng: -58.425003}}})") unless @map && @map[:sw] && @map[:sw][:lat] && @map[:sw][:lng]
+      raise ParameterError.new("Please indicate the northeast point for the map ({map: {ne: {lat: -29.980172, lng: -52.959305}}})") unless @map[:ne] && @map[:ne][:lat] && @map[:ne][:lng]
+      raise ParameterError.new("Please indicate the zoom level for the map ({map: {zoom: 9})") unless @map[:zoom]
+      raise ParameterError.new("Please indicate layers to be printed for the map ({map: {layers: [{type: 'osm'}]})") unless @map[:layers].is_a?(Array)
     end
 
     def print(output_path)
@@ -37,10 +41,9 @@ module MapPrint
 
       if @format == 'pdf'
         handler = PdfHandler.new(self)
-      elsif @format == 'png'
-        handler = PngHandler.new(self)
       else
-        raise "Unsupported format: #{@format}"
+        Logger.warn 'Did not specify format, defaulting to png'
+        handler = PngHandler.new(self)
       end
 
       handler.print
