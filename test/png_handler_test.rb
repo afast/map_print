@@ -38,6 +38,11 @@ describe MapPrint::PngHandler do
   }
   let(:context) { MapPrint::Core.new(map) }
 
+  before do
+    stub_request(:any, /.*thunderforest.com.*/).
+      to_return(:body => File.new('test/assets/sample_tile.png'), :status => 200)
+  end
+
   it 'prints the map as png' do
     context.output_path = 'map.png'
     MapPrint::PngHandler.new(context).print.must_be_nil

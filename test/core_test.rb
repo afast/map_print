@@ -126,6 +126,17 @@ BASIC_MAP = {
 }
 
 describe MapPrint::Core do
+  before do
+    stub_request(:any, /.*.openstreetmap.org.*/).
+      to_return(:body => File.new('test/assets/sample_tile.png'), :status => 200)
+    stub_request(:any, /.*pixabay.com.*/).
+      to_return(:body => File.new('test/assets/image.png'), :status => 200)
+    stub_request(:any, /.*virtualearth.net.*/).
+      to_return(:body => File.new('test/assets/sample_tile.png'), :status => 200)
+    stub_request(:any, /.*thunderforest.com.*/).
+      to_return(:body => File.new('test/assets/sample_tile.png'), :status => 200)
+  end
+
   describe 'basic map' do
     before do
       @core = MapPrint::Core.new(BASIC_MAP)

@@ -37,6 +37,11 @@ describe MapPrint::PdfHandler do
   }
   let(:context) { MapPrint::Core.new(map) }
 
+  before do
+    stub_request(:any, /.*thunderforest.com.*/).
+      to_return(:body => File.new('test/assets/sample_tile.png'), :status => 200)
+  end
+
   it 'prints the map on pdf' do
     context.output_path = 'map.pdf'
     MapPrint::PdfHandler.new(context).print.must_be_nil

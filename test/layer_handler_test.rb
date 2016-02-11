@@ -9,6 +9,13 @@ describe MapPrint::LayerHandler do
   let(:osm_handler) { MapPrint::LayerHandler.new(osm_layers, sw, ne, zoom) }
   let(:bing_handler) { MapPrint::LayerHandler.new(bing_layers, sw, ne, zoom) }
 
+  before do
+    stub_request(:any, /.*thunderforest.com.*/).
+      to_return(:body => File.new('test/assets/sample_tile.png'), :status => 200)
+    stub_request(:any, /.*virtualearth.net.*/).
+      to_return(:body => File.new('test/assets/sample_tile.png'), :status => 200)
+  end
+
   it 'has a bing provider' do
     MapPrint::LayerHandler::PROVIDERS['bing'].must_equal MapPrint::Providers::Bing
   end

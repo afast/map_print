@@ -5,6 +5,12 @@ describe MapPrint::Providers::OpenStreetMap do
   let(:ne) { MapPrint::LatLng.new(-29.980172, -52.959305) }
   let(:osm) { MapPrint::Providers::OpenStreetMap.new(sw, ne, 8) }
 
+  before do
+    stub_request(:any, /.*.openstreetmap.org.*/).
+      to_return(:body => File.new('test/assets/sample_tile.png'), :status => 200)
+  end
+
+
   describe '#download' do
     it 'calls download and to_image' do
       osm.download.must_be_instance_of File
