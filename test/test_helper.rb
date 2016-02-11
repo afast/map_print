@@ -10,3 +10,7 @@ require 'minitest/autorun'
 require 'webmock/minitest'
 
 WebMock.disable_net_connect!
+
+MiniTest.after_run do
+  WebMock.allow_net_connect!
+end
