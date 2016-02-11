@@ -44,8 +44,7 @@ MapPrint::Core.new(map_configuration).print('./map.png')
 ```
 
 `map_configuration` is a hash which contains all the necessary fields to print a map.
-For detailed information about what `map_print` expects in a hash please look at the wiki.
-[wiki](https://github.com/afast/map_print/wiki)
+For detailed information about what `map_print` expects in a hash please look at the [wiki](https://github.com/afast/map_print/wiki).
 
 The minimum hash to generate a PNG:
 
