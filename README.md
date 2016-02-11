@@ -45,11 +45,12 @@ MapPrint::Core.new(map_configuration).print('./map.png')
 
 `map_configuration` is a hash which contains all the necessary fields to print a map.
 For detailed information about what `map_print` expects in a hash please look at the wiki.
+[wiki](https://github.com/afast/map_print/wiki)
 
 The minimum hash to generate a PNG:
 
 ```ruby
-{
+map_configuration = {
   png_options: {
     width: 800,
     height: 1000
@@ -72,7 +73,7 @@ The minimum hash to generate a PNG:
 The minimum hash to generate a PDF:
 
 ```ruby
-{
+map_configuration = {
   format: 'pdf',
   map: {
     sw: {
@@ -92,7 +93,7 @@ The minimum hash to generate a PDF:
 A full example showing all the available options:
 
 ```ruby
-BASIC_MAP = {
+map_configuration = {
     format: 'pdf', # pdf or png
     pdf_options: {
       page_size: 'A4', # A0-10, B0-10, C0-10
