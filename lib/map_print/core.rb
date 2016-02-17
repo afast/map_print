@@ -58,6 +58,7 @@ module MapPrint
       if @map[:geojson]
         geojson_image = GeoJSONHandler.new(@map[:geojson], @map[:sw], @map[:ne], map_image.width, map_image.height).process
         result = MiniMagick::Image.open(map_image.path).composite(geojson_image) do |c|
+          c.density 300
           c.compose "atop"
         end
         result.write map_image.path

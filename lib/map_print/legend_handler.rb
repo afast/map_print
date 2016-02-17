@@ -8,7 +8,7 @@ module MapPrint
     def process
       size = @legend[:size]
       tempfile = Tempfile.new ['legend', '.png']
-      `convert -size #{size[:width]}x#{size[:height]} xc:white #{tempfile.path}`
+      `convert -density 300 -size #{size[:width]}x#{size[:height]} xc:white #{tempfile.path}`
       image = MiniMagick::Image.new tempfile.path
 
       x_step = size[:width] / @legend[:columns]
@@ -49,6 +49,7 @@ module MapPrint
       @legend[:elements].each do |legend_item|
         image_file = MiniMagick::Image.open(legend_item[:image])
         result = legend_image.composite(image_file) do |c|
+          c.density 300
           c.geometry image_geometry + "+#{x}+#{y}"
         end
         result.write legend_image.path
@@ -75,6 +76,7 @@ module MapPrint
       @legend[:elements].each do |legend_item|
         image_file = MiniMagick::Image.open(legend_item[:image])
         result = legend_image.composite(image_file) do |c|
+          c.density 300
           c.geometry image_geometry + "+#{x}+#{y}"
         end
         result.write legend_image.path
@@ -95,6 +97,7 @@ module MapPrint
     def draw_text(image, text, position, text_size)
       options = @legend[:textbox_style] || {}
       image.combine_options do |c|
+        c.density 300
         c.fill options[:fill_color] if options[:fill_color]
         c.stroke options[:color] if options[:color]
         c.font options[:font] || 'Arial'

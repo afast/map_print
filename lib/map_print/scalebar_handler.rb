@@ -52,6 +52,7 @@ module MapPrint
 
       y_position = size[:height] - (@scalebar[:bar_height] || 10) - @padding_bottom
       image.combine_options do |c|
+        c.density 300
         c.stroke 'black'
         c.fill 'white'
         c.draw "rectangle #{@padding_left},#{size[:height] - @padding_bottom} #{@padding_left + quarter},#{y_position}"

@@ -11,6 +11,7 @@ module MapPrint
 
       def draw_text(png, text, position, options)
         png.combine_options do |c|
+          c.density 300
           c.fill options[:fill_color] if options[:fill_color]
           c.stroke options[:color] if options[:color]
           c.font options[:font] || 'Arial'

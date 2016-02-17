@@ -16,7 +16,7 @@ module MapPrint
 
     def process
       tempfile = Tempfile.new ['geojson', '.png']
-      `convert -size #{@width}x#{@height} xc:transparent #{tempfile.path}`
+      `convert -density 300 -size #{@width}x#{@height} xc:transparent #{tempfile.path}`
       @image = MiniMagick::Image.new tempfile.path
 
       draw_geojson
@@ -82,6 +82,7 @@ module MapPrint
       y -= point_image.height / 2
 
       @image.composite(point_image) do |c|
+        c.density 300
         c.geometry("+#{x}+#{y}")
       end.write @image.path
     end
@@ -97,6 +98,7 @@ module MapPrint
       end.join(' ')
 
       @image.combine_options do |c|
+        c.density 300
         c.draw "#{draw_options(properties)} #{draw_command}"
       end
     end
@@ -108,6 +110,7 @@ module MapPrint
       end
 
       @image.combine_options do |c|
+        c.density 300
         c.draw "#{draw_options(properties, false)} polygon #{points.join(' ')}"
       end
     end

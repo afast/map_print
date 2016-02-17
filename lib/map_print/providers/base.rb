@@ -28,6 +28,7 @@ module MapPrint
 
         MiniMagick::Tool::Montage.new do |montage|
           montage.mode('concatenate')
+          montage.density 300
           montage.tile("#{provider.x_size}x#{provider.y_size}")
           montage.merge! provider.tiles.collect(&:file_path)
           montage << file.path

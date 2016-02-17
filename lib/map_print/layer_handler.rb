@@ -28,6 +28,7 @@ module MapPrint
         next_image.close
         tmp_image = MiniMagick::Image.open(next_image.path)
         result = image.composite(tmp_image) do |c|
+          c.density 300
           c.compose "atop"
           if layer[:opacity] && layer[:opacity] < 1
             c.blend layer[:opacity] * 100

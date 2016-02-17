@@ -10,6 +10,7 @@ module MapPrint
           geometry += "+#{image[:position][:x]}+#{image[:position][:y]}"
           result = png.composite(image_file) do |c|
             c.geometry geometry
+            c.density 300
           end
           result.write @context.output_path
         end
