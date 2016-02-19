@@ -4,9 +4,9 @@ module MapPrint
   class GeoJSONHandler
     def initialize(geojson, sw, ne, width, height)
       @top_lat = ne[:lat]
-      @total_lat = ne[:lat] - sw[:lat]
+      @total_lat = (ne[:lat] - sw[:lat])
       @left_lng = sw[:lng]
-      @total_lng = ne[:lng] - sw[:lng]
+      @total_lng = (ne[:lng] - sw[:lng])
       @height = height
       @width = width
       @geojson = JSON[geojson]
@@ -74,8 +74,8 @@ module MapPrint
     end
 
     def point(point, image_path)
-      x = get_x(point['coordinates'][1])
-      y = get_y(point['coordinates'][0])
+      x = get_x(point['coordinates'][0])
+      y = get_y(point['coordinates'][1])
 
       point_image = MiniMagick::Image.open(image_path)
       x -= point_image.width / 2
@@ -89,8 +89,10 @@ module MapPrint
 
     def line_string(geometry, properties)
       properties ||= {}
-      points = geometry['coordinates'].map do |coord|
-        "#{get_x(coord[1])},#{get_y(coord[0])}"
+      coords = geometry['coordinates']
+      coords = coords.first if coords.first.first.is_a?(Array)
+      points = coords.map do |coord|
+        "#{get_x(coord[0])},#{get_y(coord[1])}"
       end
 
       draw_command = (0..(points.length - 2)).map do |i|
@@ -105,8 +107,10 @@ module MapPrint
 
     def polygon(geometry, properties)
       properties ||= {}
-      points = geometry['coordinates'].map do |coord|
-        "#{get_x(coord[1])},#{get_y(coord[0])}"
+      coords = geometry['coordinates']
+      coords = coords.first if coords.first.first.is_a?(Array)
+      points = coords.map do |coord|
+        "#{get_x(coord[0])},#{get_y(coord[1])}"
       end
 
       @image.combine_options do |c|
@@ -156,7 +160,7 @@ module MapPrint
     end
 
     def get_y(lat)
-      @height * (1 - (@top_lat - lat) / @total_lat);
+      @height * (@top_lat - lat) / @total_lat;
     end
   end
 end
