@@ -64,7 +64,7 @@ module MapPrint
         c.draw "rectangle #{@padding_left + 3*quarter},#{size[:height] - @padding_bottom} #{@padding_left + 4*quarter},#{y_position}"
       end
 
-      text_options = { pointsize: 12, gravity: 'NorthWest' }
+      text_options = { pointsize: 4, gravity: 'NorthWest' }
       draw_text(image, "0", "#{@padding_left},#{@padding_top}", text_options)
       draw_text(image, (pixels_for_distance/4).round(-2).to_s, "#{-quarter + @padding_left - @padding_right},#{@padding_top}", text_options.merge(gravity: 'North'))
       draw_text(image, (pixels_for_distance/2).round(-2).to_s, "#{@padding_left - @padding_right},#{@padding_top}", text_options.merge(gravity: 'North'))
