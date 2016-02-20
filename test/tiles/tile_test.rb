@@ -7,14 +7,6 @@ describe MapPrint::Tile do
   let(:y) { lat_lng2.get_slippy_map_tile_number(3)[:y] }
   let(:tile) { MapPrint::Tile.new(x, y, 3, 'http://test.com/${z}/${y}/${x}') }
 
-  describe '.meters_per_pixel' do
-    (0..18).each do |zoom|
-      it "returns METERS_PER_PIXELS for #{zoom} zoom level" do
-        MapPrint::Tile.meters_per_pixel(zoom).must_equal MapPrint::Tile::METERS_PER_PIXELS[zoom]
-      end
-    end
-  end
-
   describe '#coords' do
     it 'returns x, y & z' do
       tile.coords.must_equal({x: 2, y: 4, z: 3})
@@ -26,12 +18,6 @@ describe MapPrint::Tile do
       proc {
         tile.download
       }.must_raise RuntimeError
-    end
-  end
-
-  describe '#get_pixel_difference' do
-    it 'returns pixel difference from tile center to lat_lng' do
-      tile.get_pixel_difference(lat_lng).must_equal({x: 0.41410936341549665, y: 0.5633788803017731})
     end
   end
 
