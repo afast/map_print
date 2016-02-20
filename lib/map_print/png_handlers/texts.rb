@@ -12,13 +12,20 @@ module MapPrint
       def draw_text(png, text, position, options)
         png.combine_options do |c|
           c.density 300
-          c.fill options[:fill_color] if options[:fill_color]
-          c.stroke options[:color] if options[:color]
-          c.font options[:font] || 'Arial'
-          c.pointsize options[:pointsize] if options[:pointsize]
-          c.gravity options[:gravity] || 'NorthWest'
+          sanitize_options(options).each do |option, value|
+            c.send option, value
+          end
           c.draw "text #{position} '#{text}'"
         end
+      end
+
+      def sanitize_options(options)
+        return {} unless options.is_a?(Hash)
+        options[:stroke] = options.delete :color if options[:color]
+        options[:fill] = options.delete :fill_color if options[:fill_color]
+        options[:gravity] ||= 'NorthWest'
+        options[:font] ||= 'Arial'
+        options
       end
     end
   end

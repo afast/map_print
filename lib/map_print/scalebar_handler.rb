@@ -76,9 +76,13 @@ module MapPrint
     private
     def validate_data!
       raise NoScalebarData.new('No scalebar data present') if @scalebar.nil? || @scalebar.empty?
+      raise InvalidScalebarZoom.new('Zoom must be between 0..18') unless (0..18).include?(@zoom)
+      validate_scalebar_width!
+    end
+
+    def validate_scalebar_width!
       raise InvalidScalebarSize.new('No scalebar width present') unless @scalebar[:size] && @scalebar[:size][:width]
       raise InvalidScalebarSize.new('No scalebar height present') unless @scalebar[:size][:height]
-      raise InvalidScalebarZoom.new('Zoom must be between 0..18') unless (0..18).include?(@zoom)
     end
 
     def get_distance_in_units

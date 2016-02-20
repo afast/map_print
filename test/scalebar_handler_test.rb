@@ -34,13 +34,13 @@ describe MapPrint::ScalebarHandler do
 
     it 'throws an error if no width given' do
       proc {
-        MapPrint::ScalebarHandler.new({size: {height: 3}}, -1)
+        MapPrint::ScalebarHandler.new({size: {height: 3}}, 1)
       }.must_raise(MapPrint::InvalidScalebarSize)
     end
 
     it 'throws an error if no height given' do
       proc {
-        MapPrint::ScalebarHandler.new({size: {width: 4}}, -1)
+        MapPrint::ScalebarHandler.new({size: {width: 4}}, 1)
       }.must_raise(MapPrint::InvalidScalebarSize)
     end
 
