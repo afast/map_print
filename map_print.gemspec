@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Andreas Fast']
   spec.email         = ['andis.machine@gmail.com']
 
-  spec.summary       = %q{Easily export maps to pdf}
-  spec.description   = %q{MapPrint allows to export many map sources and GeoJSON objects to a pdf file, along with legend and text elements to create rich maps.}
+  spec.summary       = %q{Easily export maps to pdf or png}
+  spec.description   = %q{MapPrint allows to export many map sources and GeoJSON objects to a pdf/png file, along with legend and text elements to create rich maps.}
   spec.homepage      = 'http://github.com/afast/map_print'
   spec.license       = 'MIT'
 
