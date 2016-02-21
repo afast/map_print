@@ -9,6 +9,7 @@ module MapPrint
       validate_data!
       @x_step = @legend[:size][:width] / @legend[:columns]
       @y_step = @legend[:size][:height] / @legend[:rows]
+      @elements_in_block = @legend[:orientation] == 'vertical' ? @legend[:rows] : @legend[:columns]
       @legend[:textbox_style] ||= {}
 
       if @legend[:textbox_size]
@@ -38,8 +39,16 @@ module MapPrint
     private
     def validate_data!
       raise NoLegendData.new('No legend data present') if @legend.nil? || @legend.empty?
+      validate_size!
+      validate_layout!
+    end
+
+    def validate_size!
       raise InvalidSize.new('No legend width present') unless @legend[:size] && @legend[:size][:width]
       raise InvalidSize.new('No legend height present') unless @legend[:size][:height]
+    end
+
+    def validate_layout!
       raise MissingLayoutInformation.new('Missing column layout information') unless @legend[:columns]
       raise MissingLayoutInformation.new('Missing rows layout information') unless @legend[:rows]
     end
@@ -68,22 +77,23 @@ module MapPrint
 
     def get_next_x_y(x, y, z)
       if @legend[:orientation] == 'vertical'
-        if z % @legend[:rows] == 0
-          x += @x_step
-          y = 0
-        else
-          y += @y_step
-        end
+        y, x = next_step(y, x, @y_step, @x_step, z)
       else
-        if z % @legend[:columns] == 0
-          y += @y_step
-          x = 0
-        else
-          x += @x_step
-        end
+        x, y = next_step(x, y, @x_step, @y_step, z)
       end
 
       return x, y
+    end
+
+    def next_step(small_step_value, big_step_value, small_step, big_step, z)
+      if z % @elements_in_block == 0
+        big_step_value += big_step
+        small_step = 0
+      else
+        small_step_value += small_step
+      end
+
+      return small_step_value, big_step_value
     end
   end
 end
