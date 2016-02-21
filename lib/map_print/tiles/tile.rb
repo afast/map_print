@@ -59,7 +59,5 @@ module MapPrint
     def folder_name
       "cache/#{cache_name}/#{@z}/#{@x}"
     end
-
   end
-
 end

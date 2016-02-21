@@ -61,19 +61,17 @@ module MapPrint
     end
 
     def x_array
-      return @x_array if @x_array
-
-      x1 = @sw_lat_lng.get_slippy_map_tile_number(@zoom)[:x]
-      x2 = @ne_lat_lng.get_slippy_map_tile_number(@zoom)[:x]
-      @x_array ||= x1 < x2 ? x1..x2 : (x2..x1).to_a
+      @x_array ||= get_tile_coord_array(:x)
     end
 
     def y_array
-      return @y_array if @y_array
+      @y_array ||= get_tile_coord_array(:y)
+    end
 
-      y1 = @sw_lat_lng.get_slippy_map_tile_number(@zoom)[:y]
-      y2 = @ne_lat_lng.get_slippy_map_tile_number(@zoom)[:y]
-      @y_array ||= y1 < y2 ? y1..y2 : (y2..y1).to_a
+    def get_tile_coord_array(coord)
+      coord1 = @sw_lat_lng.get_slippy_map_tile_number(@zoom)[coord]
+      coord2 = @ne_lat_lng.get_slippy_map_tile_number(@zoom)[coord]
+      coord1 < coord2 ? coord1..coord2 : coord2..coord1
     end
 
     def tile_class
