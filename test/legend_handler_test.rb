@@ -50,13 +50,13 @@ describe MapPrint::LegendHandler do
       it 'throws an error if no width given' do
         proc {
           MapPrint::LegendHandler.new({size: {height: 100}})
-        }.must_raise MapPrint::InvalidSize
+        }.must_raise MapPrint::InvalidLegendSize
       end
 
       it 'throws an error if no height given' do
         proc {
           MapPrint::LegendHandler.new({size: {width: 100}})
-        }.must_raise MapPrint::InvalidSize
+        }.must_raise MapPrint::InvalidLegendSize
       end
 
       it 'throws and error if no columns given' do

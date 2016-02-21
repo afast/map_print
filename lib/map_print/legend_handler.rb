@@ -1,8 +1,10 @@
 require_relative 'png_handlers/texts'
+require_relative 'validations/size'
 
 module MapPrint
   class LegendHandler
     include PngHandlers::Texts
+    include Validations::Size
 
     def initialize(legend)
       @legend = legend
@@ -39,13 +41,8 @@ module MapPrint
     private
     def validate_data!
       raise NoLegendData.new('No legend data present') if @legend.nil? || @legend.empty?
-      validate_size!
+      validate_size!(@legend[:size], InvalidLegendSize)
       validate_layout!
-    end
-
-    def validate_size!
-      raise InvalidSize.new('No legend width present') unless @legend[:size] && @legend[:size][:width]
-      raise InvalidSize.new('No legend height present') unless @legend[:size][:height]
     end
 
     def validate_layout!
@@ -88,7 +85,7 @@ module MapPrint
     def next_step(small_step_value, big_step_value, small_step, big_step, z)
       if z % @elements_in_block == 0
         big_step_value += big_step
-        small_step = 0
+        small_step_value = 0
       else
         small_step_value += small_step
       end

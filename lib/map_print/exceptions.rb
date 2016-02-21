@@ -8,7 +8,7 @@ module MapPrint
 
   class LegendHandlerError < StandardError; end
   class NoLegendData < LegendHandlerError; end
-  class InvalidSize < LegendHandlerError; end
+  class InvalidLegendSize < LegendHandlerError; end
   class MissingLayoutInformation < LegendHandlerError; end
 
   class ScalebarHandlerError < StandardError; end

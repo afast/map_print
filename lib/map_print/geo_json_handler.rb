@@ -53,13 +53,13 @@ module MapPrint
       when 'Polygon'
         polygon(geometry, properties)
       when 'MultiPoint'
-        multi_point(geometry, properties)
+        raise FeatureNotImplemented.new("Please consider contributing!")
       when 'MultiLineString'
-        multi_line_string(geometry, properties)
+        raise FeatureNotImplemented.new("Please consider contributing!")
       when 'MultiPolygon'
-        multi_polygon(geometry, properties)
+        raise FeatureNotImplemented.new("Please consider contributing!")
       when 'GeometryCollection'
-        geometry_collection(geometry, properties)
+        raise FeatureNotImplemented.new("Please consider contributing!")
       else
         Logger.warn "Feature type '#{geometry['type']}' not implemented!"
       end
@@ -117,22 +117,6 @@ module MapPrint
         c.density 300
         c.draw "#{draw_options(properties, false)} polygon #{points.join(' ')}"
       end
-    end
-
-    def multi_point(geometry, properties)
-      raise FeatureNotImplemented.new("Please consider contributing!")
-    end
-
-    def multi_line_string(geometry, properties)
-      raise FeatureNotImplemented.new("Please consider contributing!")
-    end
-
-    def multi_polygon(geometry, properties)
-      raise FeatureNotImplemented.new("Please consider contributing!")
-    end
-
-    def geometry_collection(geometry, properties)
-      raise FeatureNotImplemented.new("Please consider contributing!")
     end
 
     def draw_options(properties, line=true)

@@ -1,7 +1,10 @@
 require_relative 'png_handlers/texts'
+require_relative 'validations/size'
+
 module MapPrint
   class ScalebarHandler
-    include MapPrint::PngHandlers::Texts
+    include PngHandlers::Texts
+    include Validations::Size
 
     ZOOM_METERS_PER_PIXEL = {
       0 => 156543.03,
@@ -77,12 +80,7 @@ module MapPrint
     def validate_data!
       raise NoScalebarData.new('No scalebar data present') if @scalebar.nil? || @scalebar.empty?
       raise InvalidScalebarZoom.new('Zoom must be between 0..18') unless (0..18).include?(@zoom)
-      validate_scalebar_width!
-    end
-
-    def validate_scalebar_width!
-      raise InvalidScalebarSize.new('No scalebar width present') unless @scalebar[:size] && @scalebar[:size][:width]
-      raise InvalidScalebarSize.new('No scalebar height present') unless @scalebar[:size][:height]
+      validate_size!(@scalebar[:size], InvalidScalebarSize)
     end
 
     def get_distance_in_units
