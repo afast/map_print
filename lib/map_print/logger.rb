@@ -5,6 +5,8 @@ module MapPrint
   class Logger
     include Singleton
 
+    attr_accessor :logger
+
     def initialize
       @logger = ::Logger.new File.new('map_print.log', 'a+')
     end

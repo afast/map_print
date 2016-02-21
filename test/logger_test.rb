@@ -19,4 +19,8 @@ describe MapPrint::Logger do
       end
     end
   end
+
+  after do
+    MapPrint::Logger.instance.logger = Logger.new('map_print.log', 'a+')
+  end
 end
