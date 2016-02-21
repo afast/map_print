@@ -27,6 +27,9 @@ describe MapPrint::GeoJSONHandler do
           "lineCap": "round",
           "lineJoin": "round"
         }
+      }, {
+        "type": "FeatureCollection",
+        "features": []
       }]
     }'
 
@@ -88,6 +91,56 @@ describe MapPrint::GeoJSONHandler do
           "geometry":{"type":"Point", "coordinates":[-32.026862,-55.425003]}
         }'
         MapPrint::GeoJSONHandler.new(json, @sw, @ne, 500, 800).process.must_be_instance_of MiniMagick::Image
+      end
+    end
+
+    describe 'unsupported types' do
+      it 'raises FeatureNotImplemented when MultiPoint is included' do
+        json = '{
+          "type": "Feature",
+          "geometry": {
+            "type": "MultiPoint"
+          }
+        }'
+        proc {
+          MapPrint::GeoJSONHandler.new(json, @sw, @ne, 500, 800).process
+        }.must_raise MapPrint::FeatureNotImplemented
+      end
+
+      it 'raises FeatureNotImplemented when MultiLineString is included' do
+        json = '{
+          "type": "Feature",
+          "geometry": {
+            "type": "MultiLineString"
+          }
+        }'
+        proc {
+          MapPrint::GeoJSONHandler.new(json, @sw, @ne, 500, 800).process
+        }.must_raise MapPrint::FeatureNotImplemented
+      end
+
+      it 'raises FeatureNotImplemented when MultiPolygon is included' do
+        json = '{
+          "type": "Feature",
+          "geometry": {
+            "type": "MultiPolygon"
+            }
+        }'
+        proc {
+          MapPrint::GeoJSONHandler.new(json, @sw, @ne, 500, 800).process
+        }.must_raise MapPrint::FeatureNotImplemented
+      end
+
+      it 'raises FeatureNotImplemented when GeometryCollection is included' do
+        json = '{
+          "type": "Feature",
+          "geometry": {
+            "type": "GeometryCollection"
+          }
+        }'
+        proc {
+          MapPrint::GeoJSONHandler.new(json, @sw, @ne, 500, 800).process
+        }.must_raise MapPrint::FeatureNotImplemented
       end
     end
   end

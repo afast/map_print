@@ -1,9 +1,10 @@
 module MapPrint
+  class FeatureNotImplemented < StandardError; end
+
   class GeoJSONHandlerError < StandardError; end
   class InvalidGeoJSON < GeoJSONHandlerError; end
   class NoPointImage < GeoJSONHandlerError; end
   class NoGeometryPresent < GeoJSONHandlerError; end
-  class FeatureNotImplemented < GeoJSONHandlerError; end
 
   class LegendHandlerError < StandardError; end
   class NoLegendData < LegendHandlerError; end

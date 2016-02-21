@@ -8,6 +8,7 @@ describe MapPrint::LayerHandler do
   let(:zoom) { 9 }
   let(:osm_handler) { MapPrint::LayerHandler.new(osm_layers, sw, ne, zoom) }
   let(:bing_handler) { MapPrint::LayerHandler.new(bing_layers, sw, ne, zoom) }
+  let(:mixed_handlers) { MapPrint::LayerHandler.new(bing_layers + osm_layers, sw, ne, zoom) }
 
   before do
     stub_request(:any, /.*thunderforest.com.*/).
@@ -31,6 +32,10 @@ describe MapPrint::LayerHandler do
 
     it 'generates an image for bing layer' do
       bing_handler.process.must_be_instance_of File
+    end
+
+    it 'processes two layers and returns an image' do
+      mixed_handlers.process.must_be_instance_of File
     end
   end
 end

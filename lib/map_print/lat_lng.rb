@@ -6,11 +6,12 @@ module MapPrint
 
     class << self
       def distance_between(from, to)
-        return 0.0 if from == to # fixes a "zero-distance" bug
+        return 0.0 if from.lat == to.lat && from.lng == to.lng
 
         distance_between_sphere(from, to)
       end
 
+      private
       def distance_between_sphere(from, to)
         lat_sin = Math.sin(deg2rad(from.lat)) * Math.sin(deg2rad(to.lat))
         lat_cos = Math.cos(deg2rad(from.lat)) * Math.cos(deg2rad(to.lat))

@@ -50,4 +50,12 @@ describe MapPrint::ScalebarHandler do
       }.must_raise(MapPrint::InvalidScalebarZoom)
     end
   end
+
+  describe 'different units' do
+    ['meters', 'km', 'miles', 'feet'].each do |unit|
+      it "generates a scalebar for unit #{unit}" do
+        MapPrint::ScalebarHandler.new(scalebar.merge(unit: unit), 1).process.must_be_kind_of MiniMagick::Image
+      end
+    end
+  end
 end
