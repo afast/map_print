@@ -34,6 +34,7 @@ module MapPrint
       raise ParameterError.new("Please indicate the northeast point for the map ({map: {ne: {lat: -29.980172, lng: -52.959305}}})") unless @map[:ne] && @map[:ne][:lat] && @map[:ne][:lng]
       raise ParameterError.new("Please indicate the zoom level for the map ({map: {zoom: 9})") unless @map[:zoom]
       raise ParameterError.new("Please indicate layers to be printed for the map ({map: {layers: [{type: 'osm'}]})") unless @map[:layers].is_a?(Array)
+      Logger.warn 'Found geojson property defined outside map, it must be inside the map property' if @map[:geojson].nil? && args[:geojson]
     end
 
     def print(output_path)
