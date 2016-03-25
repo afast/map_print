@@ -77,14 +77,18 @@ module MapPrint
       x = get_x(point['coordinates'][0])
       y = get_y(point['coordinates'][1])
 
-      point_image = MiniMagick::Image.open(image_path)
-      x -= point_image.width / 2
-      y -= point_image.height / 2
+      if 0 <= x && x <= @width && 0 <= y && y <= @height
+        point_image = MiniMagick::Image.open(image_path)
+        x -= point_image.width / 2
+        y -= point_image.height / 2
 
-      @image.composite(point_image) do |c|
-        c.density 300
-        c.geometry("+#{x}+#{y}")
-      end.write @image.path
+        @image.composite(point_image) do |c|
+          c.density 300
+          c.geometry("+#{x}+#{y}")
+        end.write @image.path
+      else
+        Logger.warn "Point #{image_path} is outside the map's boundaries!\n#{point.inspect}"
+      end
     end
 
     def line_string(geometry, properties)
@@ -92,7 +96,12 @@ module MapPrint
       coords = geometry['coordinates']
       coords = coords.first if coords.first.first.is_a?(Array)
       points = coords.map do |coord|
-        "#{get_x(coord[0])},#{get_y(coord[1])}"
+        x = get_x(coord[0])
+        y = get_y(coord[1])
+        if 0 <= x && x <= @width && 0 <= y && y <= @height
+          Logger.warn "Line coordinate outside map's boundaries!\ngeometry: #{geometry.inspect}\nproperties: #{properties.inspect}"
+        end
+        "#{x},#{y}"
       end
 
       draw_command = (0..(points.length - 2)).map do |i|
@@ -110,7 +119,12 @@ module MapPrint
       coords = geometry['coordinates']
       coords = coords.first if coords.first.first.is_a?(Array)
       points = coords.map do |coord|
-        "#{get_x(coord[0])},#{get_y(coord[1])}"
+        x = get_x(coord[0])
+        y = get_y(coord[1])
+        if 0 <= x && x <= @width && 0 <= y && y <= @height
+          Logger.warn "Polygon coordinate outside map's boundaries!\ngeometry: #{geometry.inspect}\nproperties: #{properties.inspect}"
+        end
+        "#{x},#{y}"
       end
 
       @image.combine_options do |c|
