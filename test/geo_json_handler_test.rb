@@ -38,6 +38,18 @@ describe MapPrint::GeoJSONHandler do
     @ne = { lat: -29.980172, lng: -52.959305 }
   end
 
+  describe 'elements outside map\'s boundaries' do
+    before do
+      sw = { lat: 35.026862, lng: 58.425003 }
+      ne = { lat: 29.980172, lng: 52.959305 }
+      @handler = MapPrint::GeoJSONHandler.new(GEOJSON, sw, ne, 500, 800)
+    end
+
+    it 'does not raise an error' do
+      @handler.process.must_be_kind_of MiniMagick::Image
+    end
+  end
+
   describe 'process' do
     before do
       @handler = MapPrint::GeoJSONHandler.new(GEOJSON, @sw, @ne, 500, 800)

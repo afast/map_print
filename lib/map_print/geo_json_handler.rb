@@ -133,20 +133,29 @@ module MapPrint
       end
     end
 
-    def draw_options(properties, line=true)
+    def stroke_options(properties)
       options = ''
       if properties['stroke'] || properties['stroke'].nil?
         options += "stroke #{properties['color'] || '#0033ff'} "
         options += "stroke-width #{properties['weight'] || 5} "
         options += "stroke-opacity #{properties['opacity'] || 0.5} "
       end
+      options
+    end
 
+    def fill_options(properties, line)
+      options = ''
       if properties['fill'] || (!line && properties['fill'].nil?)
         options += "fill #{properties['fillColor'] || '#0033ff'} "
         options += "fill-opacity #{properties['fillOpacity'] || 0.2} "
         options += "fill-rule #{properties['fillRule'] || 'evenodd'} "
       end
+      options
+    end
 
+    def draw_options(properties, line=true)
+      options = stroke_options(properties)
+      options += fill_options(properties, line)
       options += "stroke-dasharray #{properties['dashArray']} " if properties['dashArray']
       options += "stroke-linecap #{properties['lineCap']} " if properties['lineCap']
       options += "stroke-linejoin #{properties['lineJoin']} " if properties['lineJoin']

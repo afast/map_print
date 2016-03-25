@@ -54,17 +54,14 @@ module MapPrint
       quarter = (size[:width] - @padding_left - @padding_right) / 4
 
       y_position = size[:height] - (@scalebar[:bar_height] || 10) - @padding_bottom
+      orig_y = size[:height] - @padding_bottom
       image.combine_options do |c|
         c.density 300
         c.stroke 'black'
-        c.fill 'white'
-        c.draw "rectangle #{@padding_left},#{size[:height] - @padding_bottom} #{@padding_left + quarter},#{y_position}"
-        c.fill 'black'
-        c.draw "rectangle #{@padding_left + quarter},#{size[:height] - @padding_bottom} #{@padding_left + 2*quarter},#{y_position}"
-        c.fill 'white'
-        c.draw "rectangle #{@padding_left + 2*quarter},#{size[:height] - @padding_bottom} #{@padding_left + 3*quarter},#{y_position}"
-        c.fill 'black'
-        c.draw "rectangle #{@padding_left + 3*quarter},#{size[:height] - @padding_bottom} #{@padding_left + 4*quarter},#{y_position}"
+        (0..3).each do |i|
+          c.fill (i % 2 == 0 ? 'white' : 'black')
+          c.draw "rectangle #{@padding_left + i*quarter},#{orig_y} #{@padding_left + (i+1)*quarter},#{y_position}"
+        end
       end
 
       text_options = { pointsize: 4, gravity: 'NorthWest' }
