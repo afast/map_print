@@ -38,20 +38,13 @@ module MapPrint
       end
     end
 
-    def feature(geometry, properties={})
+    def validate_feature(geometry, properties)
       raise NoGeometryPresent.new("No geometry present for this feature") if geometry.nil?
       case geometry['type']
-      when 'Feature'
-        feature(geometry['geometry'], geometry['properties'])
-      when 'FeatureCollection'
-        feature_collection(geometry['features'])
       when 'Point'
-        raise NoPointImage.new("Missing image in point geometry") unless properties && properties['image']
-        point(geometry, properties['image'])
-      when 'LineString'
-        line_string(geometry, properties)
-      when 'Polygon'
-        polygon(geometry, properties)
+        if properties.nil? || properties['image'].nil?
+          raise NoPointImage.new("Missing image in point geometry")
+        end
       when 'MultiPoint'
         raise FeatureNotImplemented.new("Please consider contributing!")
       when 'MultiLineString'
@@ -62,6 +55,22 @@ module MapPrint
         raise FeatureNotImplemented.new("Please consider contributing!")
       else
         Logger.warn "Feature type '#{geometry['type']}' not implemented!"
+      end
+    end
+
+    def feature(geometry, properties={})
+      validate_feature(geometry)
+      case geometry['type']
+      when 'Feature'
+        feature(geometry['geometry'], geometry['properties'])
+      when 'FeatureCollection'
+        feature_collection(geometry['features'])
+      when 'Point'
+        point(geometry, properties['image'])
+      when 'LineString'
+        line_string(geometry, properties)
+      when 'Polygon'
+        polygon(geometry, properties)
       end
     rescue GeoJSONHandlerError => ex
       Logger.warn ex
@@ -77,7 +86,7 @@ module MapPrint
       x = get_x(point['coordinates'][0])
       y = get_y(point['coordinates'][1])
 
-      if 0 <= x && x <= @width && 0 <= y && y <= @height
+      if point_inside_map?(x, y)
         point_image = MiniMagick::Image.open(image_path)
         x -= point_image.width / 2
         y -= point_image.height / 2
@@ -98,7 +107,7 @@ module MapPrint
       points = coords.map do |coord|
         x = get_x(coord[0])
         y = get_y(coord[1])
-        if 0 <= x && x <= @width && 0 <= y && y <= @height
+        if !point_inside_map?(x, y)
           Logger.warn "Line coordinate outside map's boundaries!\ngeometry: #{geometry.inspect}\nproperties: #{properties.inspect}"
         end
         "#{x},#{y}"
@@ -121,7 +130,7 @@ module MapPrint
       points = coords.map do |coord|
         x = get_x(coord[0])
         y = get_y(coord[1])
-        if 0 <= x && x <= @width && 0 <= y && y <= @height
+        if !point_inside_map?(x, y)
           Logger.warn "Polygon coordinate outside map's boundaries!\ngeometry: #{geometry.inspect}\nproperties: #{properties.inspect}"
         end
         "#{x},#{y}"
@@ -168,6 +177,10 @@ module MapPrint
 
     def get_y(lat)
       @height * (@top_lat - lat) / @total_lat;
+    end
+
+    def point_inside_map?(x, y)
+      0 <= x && x <= @width && 0 <= y && y <= @height
     end
   end
 end
