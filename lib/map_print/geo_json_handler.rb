@@ -59,7 +59,7 @@ module MapPrint
     end
 
     def feature(geometry, properties={})
-      validate_feature(geometry)
+      validate_feature(geometry, properties)
       case geometry['type']
       when 'Feature'
         feature(geometry['geometry'], geometry['properties'])
