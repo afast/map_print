@@ -19,12 +19,12 @@ module MapPrint
 
       scalebar_image = @context.print_scalebar
       if scalebar_image
-        @pdf.image scalebar_image.path, at: [@context.scalebar[:position][:x], @pdf.bounds.top - @context.scalebar[:position][:y]]
+        print_image(scalebar_image.path, @context.scalebar_image[:position])
       end
 
       legend_image = @context.print_legend
       if legend_image
-        @pdf.image legend_image.path, at: [@context.legend[:position][:x], @pdf.bounds.top - @context.legend[:position][:y]]
+        print_image(legend_image.path, @context.legend[:position])
       end
 
       @pdf.render_file(@context.output_path)
@@ -41,6 +41,10 @@ module MapPrint
 
       position = @context.map[:position] || {}
       @pdf.image map_image.path, at: [position[:x] || 0, @pdf.bounds.top - (position[:y] || 0)], fit: size.values
+    end
+
+    def print_image(image_path, position)
+      @pdf.image image_path, at: [position[:x], @pdf.bounds.top - position[:y]]
     end
   end
 end

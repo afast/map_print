@@ -10,8 +10,10 @@ class MapPrintCommand < Thor
 
   method_option :south_west, type: :string, required: true
   method_option :north_east, type: :string, required: true
-  method_option :output, type: :string, required: true
+  method_option :width, type: :numeric, required: true
+  method_option :height, type: :numeric, required: true
   method_option :zoom, type: :numeric, default: 10
+  method_option :output, type: :string, required: true
 
   method_option :provider, type: :string, default: 'osm',
                 enum: ['osm', 'bing']
@@ -25,8 +27,11 @@ class MapPrintCommand < Thor
     south_west = MapPrint::LatLng.new(*south_west_coordinate)
     north_east = MapPrint::LatLng.new(*north_east_coordinate)
 
+    png_options = {height: options[:height], width: options[:width]}
+
     map_options = {
       format: 'png',
+      png_options: png_options,
       map: {
         sw: {
           lat: south_west.lat,

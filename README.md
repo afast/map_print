@@ -27,7 +27,7 @@ Or install it yourself as:
 
 ### Executable 
 
-`map_print print --south-west="-35.026862,-58.425003" --north-east="-29.980172,-52.959305" --zoom="10" --output="output.png"`
+`map_print print --south-west="-35.026862,-58.425003" --north-east="-29.980172,-52.959305" --width=500 --height=800 --zoom="10" --output="output.png"`
 
 Indicating southwest and northeast to determine the bounding box. Set the zoom at which the tiles should be requested.
 
