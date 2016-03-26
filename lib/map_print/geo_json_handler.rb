@@ -95,15 +95,7 @@ module MapPrint
     end
 
     def line_string(geometry, properties)
-      properties ||= {}
-      coords = geometry['coordinates']
-      coords = coords.first if coords.first.first.is_a?(Array)
-      points = coords.map do |coord|
-        x = get_x(coord[0])
-        y = get_y(coord[1])
-        consider_outside_boundaries(x, y, geometry, properties)
-        "#{x},#{y}"
-      end
+      points = generate_drawable_points(geometry, properties)
 
       draw_command = (0..(points.length - 2)).map do |i|
         "line #{points[i]} #{points[i+1]}"
@@ -116,15 +108,7 @@ module MapPrint
     end
 
     def polygon(geometry, properties)
-      properties ||= {}
-      coords = geometry['coordinates']
-      coords = coords.first if coords.first.first.is_a?(Array)
-      points = coords.map do |coord|
-        x = get_x(coord[0])
-        y = get_y(coord[1])
-        consider_outside_boundaries(x, y, geometry, properties)
-        "#{x},#{y}"
-      end
+      points = generate_drawable_points(geometry, properties)
 
       @image.combine_options do |c|
         c.density 300
@@ -175,7 +159,19 @@ module MapPrint
 
     def consider_outside_boundaries(x, y, geometry, properties)
       if !point_inside_map?(x, y)
-        Logger.warn "Line coordinate outside map's boundaries!\ngeometry: #{geometry.inspect}\nproperties: #{properties.inspect}"
+        Logger.warn "Coordinate outside map's boundaries!\ngeometry: #{geometry.inspect}\nproperties: #{properties.inspect}"
+      end
+    end
+
+    def generate_drawable_points(geometry, properties)
+      properties ||= {}
+      coords = geometry['coordinates']
+      coords = coords.first if coords.first.first.is_a?(Array)
+      coords.map do |coord|
+        x = get_x(coord[0])
+        y = get_y(coord[1])
+        consider_outside_boundaries(x, y, geometry, properties)
+        "#{x},#{y}"
       end
     end
   end
