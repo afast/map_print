@@ -45,13 +45,7 @@ module MapPrint
         if properties.nil? || properties['image'].nil?
           raise NoPointImage.new("Missing image in point geometry")
         end
-      when 'MultiPoint'
-        raise FeatureNotImplemented.new("Please consider contributing!")
-      when 'MultiLineString'
-        raise FeatureNotImplemented.new("Please consider contributing!")
-      when 'MultiPolygon'
-        raise FeatureNotImplemented.new("Please consider contributing!")
-      when 'GeometryCollection'
+      when 'MultiPoint', 'MultiLineString', 'MultiPolygon', 'GeometryCollection'
         raise FeatureNotImplemented.new("Please consider contributing!")
       else
         Logger.warn "Feature type '#{geometry['type']}' not implemented!"
@@ -107,9 +101,7 @@ module MapPrint
       points = coords.map do |coord|
         x = get_x(coord[0])
         y = get_y(coord[1])
-        if !point_inside_map?(x, y)
-          Logger.warn "Line coordinate outside map's boundaries!\ngeometry: #{geometry.inspect}\nproperties: #{properties.inspect}"
-        end
+        consider_outside_boundaries(x, y, geometry, properties)
         "#{x},#{y}"
       end
 
@@ -130,9 +122,7 @@ module MapPrint
       points = coords.map do |coord|
         x = get_x(coord[0])
         y = get_y(coord[1])
-        if !point_inside_map?(x, y)
-          Logger.warn "Polygon coordinate outside map's boundaries!\ngeometry: #{geometry.inspect}\nproperties: #{properties.inspect}"
-        end
+        consider_outside_boundaries(x, y, geometry, properties)
         "#{x},#{y}"
       end
 
@@ -154,7 +144,7 @@ module MapPrint
 
     def fill_options(properties, line)
       options = ''
-      if properties['fill'] || (!line && properties['fill'].nil?)
+      if properties['fill'] != false || !line
         options += "fill #{properties['fillColor'] || '#0033ff'} "
         options += "fill-opacity #{properties['fillOpacity'] || 0.2} "
         options += "fill-rule #{properties['fillRule'] || 'evenodd'} "
@@ -181,6 +171,12 @@ module MapPrint
 
     def point_inside_map?(x, y)
       0 <= x && x <= @width && 0 <= y && y <= @height
+    end
+
+    def consider_outside_boundaries(x, y, geometry, properties)
+      if !point_inside_map?(x, y)
+        Logger.warn "Line coordinate outside map's boundaries!\ngeometry: #{geometry.inspect}\nproperties: #{properties.inspect}"
+      end
     end
   end
 end
