@@ -19,7 +19,7 @@ module MapPrint
 
       scalebar_image = @context.print_scalebar
       if scalebar_image
-        print_image(scalebar_image.path, @context.scalebar_image[:position])
+        print_image(scalebar_image.path, @context.scalebar[:position])
       end
 
       legend_image = @context.print_legend
