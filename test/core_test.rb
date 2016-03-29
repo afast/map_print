@@ -121,7 +121,8 @@ BASIC_MAP = {
     bar_height: 10,
     background_color: 'black',
     background_opacity: 0.4,
-    size: {width: 200, height: 40}
+    size: {width: 200, height: 40},
+    text_style: { color: 'yellow' }
   }
 }
 

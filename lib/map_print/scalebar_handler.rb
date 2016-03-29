@@ -64,7 +64,7 @@ module MapPrint
         end
       end
 
-      text_options = { pointsize: 4, gravity: 'NorthWest' }
+      text_options = { pointsize: 4, gravity: 'NorthWest' }.merge(@scalebar[:text_style] || {})
       draw_text(image, "0", "#{@padding_left},#{@padding_top}", text_options)
       draw_text(image, (pixels_for_distance/4).round(-2).to_s, "#{-quarter + @padding_left - @padding_right},#{@padding_top}", text_options.merge(gravity: 'North'))
       draw_text(image, (pixels_for_distance/2).round(-2).to_s, "#{@padding_left - @padding_right},#{@padding_top}", text_options.merge(gravity: 'North'))
