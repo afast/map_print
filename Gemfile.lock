@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    map_print (1.0.1)
+    map_print (1.1.0)
       mini_magick (~> 4.3)
       parallel (~> 1.6)
       prawn (~> 2.0)
