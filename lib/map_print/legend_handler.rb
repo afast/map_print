@@ -6,12 +6,21 @@ module MapPrint
     include PngHandlers::Texts
     include Validations::Size
 
+    OVERFLOW = {
+      expand: 'expand',
+      compact: 'compact',
+      hidden: 'hidden'
+    }
+    VERTICAL = 'vertical'
+    HORIZONTAL = 'horizontal'
+
     def initialize(legend)
       @legend = legend
       validate_data!
+      overflow_option_adjustments
       @x_step = @legend[:size][:width] / @legend[:columns]
       @y_step = @legend[:size][:height] / @legend[:rows]
-      @elements_in_block = @legend[:orientation] == 'vertical' ? @legend[:rows] : @legend[:columns]
+      @elements_in_block = @legend[:orientation] == VERTICAL ? @legend[:rows] : @legend[:columns]
       @legend[:textbox_style] ||= {}
 
       if @legend[:textbox_size]
@@ -73,7 +82,7 @@ module MapPrint
     end
 
     def get_next_x_y(x, y, z)
-      if @legend[:orientation] == 'vertical'
+      if @legend[:orientation] == VERTICAL
         y, x = next_step(y, x, @y_step, @x_step, z)
       else
         x, y = next_step(x, y, @x_step, @y_step, z)
@@ -91,6 +100,62 @@ module MapPrint
       end
 
       return small_step_value, big_step_value
+    end
+
+    def overflow_hidden?
+      @legend[:overflow].nil? || @legend[:overflow].downcase == OVERFLOW[:hidden]
+    end
+
+    def overflow_expand?
+      @legend[:overflow].downcase == OVERFLOW[:expand]
+    end
+
+    def overflow_compact?
+      @legend[:overflow].downcase == OVERFLOW[:compact]
+    end
+
+    def vertical_orientation?
+      @legend[:orientation] == VERTICAL
+    end
+
+    def horizontal_orientation?
+      @legend[:orientation] == HORIZONTAL
+    end
+
+    def available_legend_spots
+      @legend[:columns] * @legend[:rows]
+    end
+
+    def overflow_option_adjustments
+      return unless @legend[:elements].size > available_legend_spots
+      case
+      when overflow_hidden?
+        @legend[:elements] = @legend[:elements][0..(available_legend_spots-1)]
+      when overflow_expand?
+        expand_adjustments
+      when overflow_compact?
+        compact_adjustments
+      end
+    end
+
+    def expand_adjustments
+      if vertical_orientation?
+        column_width = @legend[:size][:width] / @legend[:columns]
+        compact_adjustments
+        @legend[:size][:width] = @legend[:columns] * column_width
+      elsif horizontal_orientation?
+        row_height = @legend[:size][:height] / @legend[:rows]
+        compact_adjustments
+        @legend[:size][:height] = @legend[:rows] * row_height
+      end
+    end
+
+    def compact_adjustments
+      if vertical_orientation?
+        @legend[:columns] = (@legend[:elements].size / @legend[:rows].to_f).ceil
+      elsif horizontal_orientation?
+        @legend[:rows] = (@legend[:elements].size / @legend[:columns].to_f).ceil
+      end
     end
   end
 end

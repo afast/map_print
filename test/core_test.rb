@@ -90,10 +90,17 @@ BASIC_MAP = {
     image_size: {width: 16, height: 16},
     textbox_size: {width: 40, height: 16},
     image_textbox_separation: 5,
+    textbox_style: {
+      fill_color: '#ffffff',
+      color: '#000000',
+      font: 'Arial',
+      pointsize: '4',
+      gravity: 'NorthWest',
+    },
     orientation: 'horizontal', # horizontal, vertical
     overflow: 'hidden', # expand, hidden, compact
-    columns: 5,
-    rows: 5,
+    columns: 2,
+    rows: 2,
     elements: [{
       image: 'test/assets/marker.png',
       text: 'marker legend'
@@ -286,6 +293,40 @@ describe MapPrint::Core do
       MapPrint::Core.new(MINIMUM_PDF_MAP).print('./minimum_map.png')
       assert File.exists?('./minimum_map.png')
       File.delete('./minimum_map.png')
+    end
+  end
+
+  describe 'legend overflow' do
+    it 'is hidden' do
+      MapPrint::Core.new(BASIC_MAP.merge(legend: BASIC_MAP[:legend].merge(overflow: 'hidden'))).print('./map.pdf')
+      assert File.exists?('./map.pdf')
+    end
+
+    it 'is compacted' do
+      MapPrint::Core.new(BASIC_MAP.merge(legend: BASIC_MAP[:legend].merge(overflow: 'compact'))).print('./map.pdf')
+      assert File.exists?('./map.pdf')
+    end
+
+    it 'is expanded' do
+      MapPrint::Core.new(BASIC_MAP.merge(legend: BASIC_MAP[:legend].merge(overflow: 'expand'))).print('./map.pdf')
+      assert File.exists?('./map.pdf')
+    end
+
+    describe 'vertical' do
+      it 'is hidden' do
+        MapPrint::Core.new(BASIC_MAP.merge(legend: BASIC_MAP[:legend].merge(orientation: 'vertical', overflow: 'hidden'))).print('./map.pdf')
+        assert File.exists?('./map.pdf')
+      end
+
+      it 'is compacted' do
+        MapPrint::Core.new(BASIC_MAP.merge(legend: BASIC_MAP[:legend].merge(orientation: 'vertical', overflow: 'compact'))).print('./map.pdf')
+        assert File.exists?('./map.pdf')
+      end
+
+      it 'is expanded' do
+        MapPrint::Core.new(BASIC_MAP.merge(legend: BASIC_MAP[:legend].merge(orientation: 'vertical', overflow: 'expand'))).print('./map.pdf')
+        assert File.exists?('./map.pdf')
+      end
     end
   end
 
