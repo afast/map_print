@@ -41,15 +41,15 @@ module MapPrint
         geometry += size[:width].to_s if size[:width]
         geometry += 'x'
         geometry += size[:height].to_s if size[:height]
-      end
 
-      image = MiniMagick::Image.new(map_image.path)
-      image.combine_options do |c|
-        c.density 300
-        c.resize geometry
-        c.unsharp '1.5x1+0.7+0.02'
+        image = MiniMagick::Image.new(map_image.path)
+        image.combine_options do |c|
+          c.density 300
+          c.resize geometry
+          c.unsharp '1.5x1+0.7+0.02'
+        end
+        image.write map_image.path
       end
-      image.write map_image.path
 
       map_image = @context.print_geojson(MiniMagick::Image.new(map_image.path))
 
