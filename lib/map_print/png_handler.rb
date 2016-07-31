@@ -34,7 +34,6 @@ module MapPrint
 
     def print_map
       map_image = @context.print_layers
-      map_image = @context.print_geojson(MiniMagick::Image.new(map_image.path))
 
       size = @context.map[:size]
       geometry = ''
@@ -44,7 +43,17 @@ module MapPrint
         geometry += size[:height].to_s if size[:height]
       end
 
-      overlay_image(map_image, @context.map[:position], geometry)
+      image = MiniMagick::Image.new(map_image.path)
+      image.combine_options do |c|
+        c.density 300
+        c.resize geometry
+        c.unsharp '1.5x1+0.7+0.02'
+      end
+      image.write map_image.path
+
+      map_image = @context.print_geojson(MiniMagick::Image.new(map_image.path))
+
+      overlay_image(map_image, @context.map[:position])
     end
 
     private

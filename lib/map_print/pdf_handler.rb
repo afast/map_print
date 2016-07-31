@@ -33,14 +33,27 @@ module MapPrint
     private
     def print_map
       map_image = @context.print_layers
+
+      size = @context.map[:size]
+      geometry = ''
+      if size && (size[:width] || size[:height])
+        geometry += size[:width].to_s if size[:width]
+        geometry += 'x'
+        geometry += size[:height].to_s if size[:height]
+      end
+
+      image = MiniMagick::Image.new(map_image.path)
+      image.combine_options do |c|
+        c.density 300
+        c.resize geometry
+        c.unsharp '1.5x1+0.7+0.02'
+      end
+      image.write map_image.path
+
       map_image = @context.print_geojson(MiniMagick::Image.new(map_image.path))
 
-      size = @context.map[:size] || {}
-      size[:width] ||= map_image.width
-      size[:height] ||= map_image.height
-
       position = @context.map[:position] || {}
-      @pdf.image map_image.path, at: [position[:x] || 0, @pdf.bounds.top - (position[:y] || 0)], fit: size.values
+      @pdf.image map_image.path, at: [position[:x] || 0, @pdf.bounds.top - (position[:y] || 0)]
     end
 
     def print_image(image_path, position)
